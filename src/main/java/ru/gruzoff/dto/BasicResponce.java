@@ -1,4 +1,7 @@
 package ru.gruzoff.dto;
 
-abstract class BasicResponce {
+import lombok.Data;
+
+@Data
+public abstract class BasicResponce {
 }

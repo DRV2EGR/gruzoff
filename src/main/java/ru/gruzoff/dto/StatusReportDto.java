@@ -1,9 +1,13 @@
 package ru.gruzoff.dto;
 
+import lombok.Data;
+
+@Data
 public class StatusReportDto extends BasicResponce {
     String status;
 
     public StatusReportDto(byte status) {
-        this.status = (status == 1)?"ok":"error";
+        super();
+        this.status = (status == 1)?"working":"error";
     }
 }
