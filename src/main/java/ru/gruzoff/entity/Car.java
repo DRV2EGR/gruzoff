@@ -1,7 +1,6 @@
 package ru.gruzoff.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import lombok.Data;
 
 @Entity

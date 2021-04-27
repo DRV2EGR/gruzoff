@@ -88,6 +88,22 @@ public class User extends BaseEntity{
     @JoinColumn(name = "orders", referencedColumnName = "id")
     protected List<Order> orders;
 
+    @OneToMany
+    @JoinColumn(name = "user_id_to", referencedColumnName = "id")
+    protected List<Likes> puttedLikes;
+
+    @OneToMany
+    @JoinColumn(name = "user_id_from", referencedColumnName = "id")
+    protected List<Likes> recievedLikes;
+
+    @OneToMany
+    @JoinColumn(name = "user_id_to", referencedColumnName = "id")
+    protected List<Comments> puttedComments;
+
+    @OneToMany
+    @JoinColumn(name = "user_id_from", referencedColumnName = "id")
+    protected List<Comments> recievedComments;
+
 
     /**
      * Instantiates a new User.
