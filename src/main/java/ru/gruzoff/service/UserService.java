@@ -10,8 +10,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.gruzoff.dto.UserDto;
+import ru.gruzoff.entity.Customers;
 import ru.gruzoff.entity.User;
 import ru.gruzoff.payload.BasicPayload;
+import ru.gruzoff.payload.UserDtoPayload;
+import ru.gruzoff.repository.CustomerRepository;
 import ru.gruzoff.repository.RoleRepository;
 import ru.gruzoff.repository.UserRepository;
 
@@ -26,6 +29,9 @@ public class UserService {
 
     @Autowired
     private RoleRepository roleRepository;
+
+    @Autowired
+    private CustomerRepository customerRepository;
 
     /**
      * The B crypt password encoder.
@@ -72,7 +78,7 @@ public class UserService {
         return userRepository.findById(userId);
     }
 
-    private User createNewUserAndFillBasicFields(BasicPayload basicPayload) {
+    public User createNewUserAndFillBasicFields(BasicPayload basicPayload) {
         User user = new User();
 
         user.setUsername(basicPayload.getUsername());
@@ -98,6 +104,36 @@ public class UserService {
             log.info("User " + optionalUser.get().toString() + "found by email " + email);
         else log.info("User with email '" + email + "' not found.");
         return userRepository.findByEmail(email);
+    }
+
+    public UserDto registerNewCustomer(User user) {
+        Customers customers = new Customers();
+
+        user.setRole(roleRepository.findById(2L).get());
+        customers.setUser(user);
+
+        customerRepository.save(customers);
+        return convertUserToUserDto(user);
+    }
+
+    public UserDto registerNewDriver(User user) {
+        Customers customers = new Customers();
+
+        user.setRole(roleRepository.findById(3L).get());
+        customers.setUser(user);
+
+        customerRepository.save(customers);
+        return convertUserToUserDto(user);
+    }
+
+    public UserDto registerNewLoader(User user) {
+        Customers customers = new Customers();
+
+        user.setRole(roleRepository.findById(4L).get());
+        customers.setUser(user);
+
+        customerRepository.save(customers);
+        return convertUserToUserDto(user);
     }
 
 
