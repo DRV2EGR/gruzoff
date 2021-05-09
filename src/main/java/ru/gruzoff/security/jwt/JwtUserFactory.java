@@ -2,6 +2,8 @@ package ru.gruzoff.security.jwt;
 
 
 
+import java.util.List;
+
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import ru.gruzoff.entity.User;
 
@@ -16,9 +18,19 @@ public class JwtUserFactory {
      * @return the jwt user
      */
     public static JwtUser create(User user) {
+//        if (user.getRole().getName().equals("ROLE_CUSTOMER") ||
+//                user.getRole().getName().equals("ROLE_LOADER") ||
+//                user.getRole().getName().equals("ROLE_DRIVER")) {
+//            SimpleGrantedAuthority simpleGrantedAuthority1 = new SimpleGrantedAuthority(user.getRole().getName());
+//            SimpleGrantedAuthority simpleGrantedAuthority2 = new SimpleGrantedAuthority("ROLE_USER");
+//        }
         return new JwtUser(
                 user.getUsername(),
                 user.getPassword(),
-                new SimpleGrantedAuthority(user.getRole().getName()));
+                List.of(
+                        new SimpleGrantedAuthority(user.getRole().getName()),
+                        new SimpleGrantedAuthority("ROLE_USER")
+                )
+        );
     }
 }

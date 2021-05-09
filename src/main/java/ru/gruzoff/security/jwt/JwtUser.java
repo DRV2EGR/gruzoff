@@ -33,6 +33,12 @@ public class JwtUser implements UserDetails {
         authorities.add(grantedAuthority);
     }
 
+    public JwtUser(String username, String password, Collection<GrantedAuthority> authorities) {
+        this.username = username;
+        this.password = password;
+        this.authorities = authorities;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return authorities;

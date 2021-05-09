@@ -106,30 +106,45 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
-    public UserDto registerNewCustomer(User user) {
+    public UserDto registerNewCustomer(UserDtoPayload userDtoPayload) {
+        User user = createNewUserAndFillBasicFields(userDtoPayload);
         Customers customers = new Customers();
 
         user.setRole(roleRepository.findById(2L).get());
+        String encodedPassword = bCryptPasswordEncoder.encode(userDtoPayload.getPassword());
+        user.setPassword(encodedPassword);
+
+        userRepository.save(user);
         customers.setUser(user);
 
         customerRepository.save(customers);
         return convertUserToUserDto(user);
     }
 
-    public UserDto registerNewDriver(User user) {
+    public UserDto registerNewDriver(UserDtoPayload userDtoPayload) {
+        User user = createNewUserAndFillBasicFields(userDtoPayload);
         Customers customers = new Customers();
 
         user.setRole(roleRepository.findById(3L).get());
+        String encodedPassword = bCryptPasswordEncoder.encode(userDtoPayload.getPassword());
+        user.setPassword(encodedPassword);
+
+        userRepository.save(user);
         customers.setUser(user);
 
         customerRepository.save(customers);
         return convertUserToUserDto(user);
     }
 
-    public UserDto registerNewLoader(User user) {
+    public UserDto registerNewLoader(UserDtoPayload userDtoPayload) {
+        User user = createNewUserAndFillBasicFields(userDtoPayload);
         Customers customers = new Customers();
 
         user.setRole(roleRepository.findById(4L).get());
+        String encodedPassword = bCryptPasswordEncoder.encode(userDtoPayload.getPassword());
+        user.setPassword(encodedPassword);
+
+        userRepository.save(user);
         customers.setUser(user);
 
         customerRepository.save(customers);

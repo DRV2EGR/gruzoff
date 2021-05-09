@@ -26,25 +26,19 @@ public class UserSignupController {
 
     @PostMapping("/customer")
     public ResponseEntity<UserDto> signUpNewCustomer(@RequestBody UserDtoPayload userDtoPayload) {
-        User newUser = userService.createNewUserAndFillBasicFields(userDtoPayload);
-
-        UserDto resp = userService.registerNewCustomer(newUser);
+        UserDto resp = userService.registerNewCustomer(userDtoPayload);
         return ResponseEntity.ok(resp);
     }
 
     @PostMapping("/driver")
     public ResponseEntity<UserDto> signUpNewDriver(@RequestBody UserDtoPayload userDtoPayload) {
-        User newUser = userService.createNewUserAndFillBasicFields(userDtoPayload);
-
-        UserDto resp = userService.registerNewDriver(newUser);
+        UserDto resp = userService.registerNewDriver(userDtoPayload);
         return ResponseEntity.ok(resp);
     }
 
     @PostMapping("/loader")
     public ResponseEntity<UserDto> signUpNewLoader(@RequestBody UserDtoPayload userDtoPayload) {
-        User newUser = userService.createNewUserAndFillBasicFields(userDtoPayload);
-
-        UserDto resp = userService.registerNewLoader(newUser);
+        UserDto resp = userService.registerNewLoader(userDtoPayload);
         return ResponseEntity.ok(resp);
     }
 

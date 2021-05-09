@@ -16,8 +16,13 @@ import ru.gruzoff.security.jwt.JwtTokenProvider;
  */
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    private static final String PUBLIC_USERS_ENDPOINT = "/api/user/public/**";
-    private static final String PRIVATE_USERS_ENDPOINT = "/api/user/private/**";
+
+    // AUTH ENDPOINTS
+    private static final String AUTH_ENDPOINT = "/api/auth/**";
+    private static final String SIGNUP_ENDPOINT = "/api/signup/**";
+
+    private static final String PUBLIC_USERS_ENDPOINT = "/v1/api/user/public/**";
+    private static final String PRIVATE_USERS_ENDPOINT = "/v1/api/user/private/**";
 
     private final JwtTokenProvider jwtTokenProvider;
 
@@ -45,6 +50,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
+                    .antMatchers(AUTH_ENDPOINT).permitAll()
+                    .antMatchers(SIGNUP_ENDPOINT).permitAll()
                     .antMatchers(PUBLIC_USERS_ENDPOINT).permitAll()
                     .antMatchers(PRIVATE_USERS_ENDPOINT).hasAnyRole("USER", "ADMIN")
                     .anyRequest().authenticated()
