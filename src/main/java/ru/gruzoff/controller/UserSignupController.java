@@ -16,7 +16,7 @@ import ru.gruzoff.service.UserService;
  * The type User signup controller.
  */
 @Controller
-@RequestMapping("/api/signup")
+@RequestMapping("/v1/api/signup")
 public class UserSignupController {
     /**
      * The User service.

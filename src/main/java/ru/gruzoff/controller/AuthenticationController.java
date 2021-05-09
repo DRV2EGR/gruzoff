@@ -20,7 +20,7 @@ import ru.gruzoff.service.UserService;
  * The type Authentication controller.
  */
 @RestController
-@RequestMapping("/api/auth/")
+@RequestMapping("/v1/api/auth/")
 public class AuthenticationController {
 
     @Autowired
