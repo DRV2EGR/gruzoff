@@ -9,4 +9,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ResponseStatus(HttpStatus.FORBIDDEN)
 public class JwtInvalidRefreshTokenException extends BadRequestException {
     private static final long serialVersionUID = 1L;
+
+    public JwtInvalidRefreshTokenException(String message) {
+        super(message);
+    }
 }

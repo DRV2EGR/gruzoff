@@ -8,4 +8,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  */
 @ResponseStatus(HttpStatus.NOT_FOUND)
 public class UserNotFoundExeption extends ApiServerException{
+    public UserNotFoundExeption(String message) {
+        super(message);
+    }
 }
