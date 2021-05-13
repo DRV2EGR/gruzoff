@@ -1,5 +1,6 @@
 package ru.gruzoff.service;
 
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -11,12 +12,15 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.gruzoff.dto.UserDto;
 import ru.gruzoff.entity.Customers;
+import ru.gruzoff.entity.Likes;
+import ru.gruzoff.entity.Order;
 import ru.gruzoff.entity.User;
+import ru.gruzoff.exception.ConflictException;
+import ru.gruzoff.exception.NotFoundException;
+import ru.gruzoff.exception.UserNotFoundExeption;
 import ru.gruzoff.payload.BasicPayload;
 import ru.gruzoff.payload.UserDtoPayload;
-import ru.gruzoff.repository.CustomerRepository;
-import ru.gruzoff.repository.RoleRepository;
-import ru.gruzoff.repository.UserRepository;
+import ru.gruzoff.repository.*;
 
 /**
  * The type User service.
@@ -32,6 +36,12 @@ public class UserService {
 
     @Autowired
     private CustomerRepository customerRepository;
+
+    @Autowired
+    private OrderReposiory orderReposiory;
+
+    @Autowired
+    private LikesRepository likesRepository;
 
     /**
      * The B crypt password encoder.
@@ -164,5 +174,58 @@ public class UserService {
         userDto.setPhoneNumber(user.getPhoneNumber());
 
         return userDto;
+    }
+
+    public Order getUsersOrderByOrderId(User user, long orderid) {
+        Order order = orderReposiory.findByIdAndCustomerId(
+                orderid,
+                customerRepository.findByUser(user).orElseThrow(
+                        () -> new UserNotFoundExeption("")
+                )
+        ).orElseThrow(
+                () -> new NotFoundException("")
+        );
+
+        return order;
+    }
+
+    public void setLike(User usr_from, long id_to) {
+        User usr_to = userRepository.findById(id_to).orElseThrow(
+                () -> new UserNotFoundExeption("")
+        );
+
+        Likes like = new Likes();
+        like.setUser_from(usr_from);
+        like.setUser_to(usr_to);
+
+        // SAVE TRANSISTENT
+        likesRepository.save(like);
+
+        usr_from.getPuttedLikes().add(like);
+        userRepository.save(usr_from);
+        usr_to.getRecievedLikes().add(like);
+        userRepository.save(usr_to);
+    }
+
+    public UserDto changeInfo(User user, UserDtoPayload userDtoPayload) throws NoSuchFieldException, IllegalAccessException {
+        System.out.println(userDtoPayload.getClass().getDeclaredFields().length);
+        for (Field obj : userDtoPayload.getClass().getDeclaredFields()) {
+            Field field = user.getClass().getDeclaredField(obj.getName());
+            field.setAccessible(true);
+            Field field1 = userDtoPayload.getClass().getDeclaredField(obj.getName());
+            field1.setAccessible(true);
+
+            if (field1.get(userDtoPayload) != null) {
+                field.set(user, (String) field1.get(userDtoPayload));
+            }
+        }
+
+        try {
+            userRepository.save(user);
+        } catch (Exception e) {
+            throw new ConflictException("Incorrect value");
+        }
+
+        return convertUserToUserDto(user);
     }
 }
