@@ -116,6 +116,7 @@ public class UserPrivateController {
 
     @DeleteMapping("/user")
     public void deleteUser() {
+        userService.deleteUser(getAuthentificatedUser());
 
     }
 }

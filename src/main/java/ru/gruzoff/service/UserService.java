@@ -11,10 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.gruzoff.dto.UserDto;
-import ru.gruzoff.entity.Customers;
-import ru.gruzoff.entity.Likes;
-import ru.gruzoff.entity.Order;
-import ru.gruzoff.entity.User;
+import ru.gruzoff.entity.*;
 import ru.gruzoff.exception.ConflictException;
 import ru.gruzoff.exception.NotFoundException;
 import ru.gruzoff.exception.UserNotFoundExeption;
@@ -42,6 +39,12 @@ public class UserService {
 
     @Autowired
     private LikesRepository likesRepository;
+
+    @Autowired
+    private LoadersRepository loadersRepository;
+
+    @Autowired
+    private DriversRepository driversRepository;
 
     /**
      * The B crypt password encoder.
@@ -133,31 +136,31 @@ public class UserService {
 
     public UserDto registerNewDriver(UserDtoPayload userDtoPayload) {
         User user = createNewUserAndFillBasicFields(userDtoPayload);
-        Customers customers = new Customers();
+        Drivers driver = new Drivers();
 
         user.setRole(roleRepository.findById(3L).get());
         String encodedPassword = bCryptPasswordEncoder.encode(userDtoPayload.getPassword());
         user.setPassword(encodedPassword);
 
         userRepository.save(user);
-        customers.setUser(user);
+        driver.setUser(user);
 
-        customerRepository.save(customers);
+        driversRepository.save(driver);
         return convertUserToUserDto(user);
     }
 
     public UserDto registerNewLoader(UserDtoPayload userDtoPayload) {
         User user = createNewUserAndFillBasicFields(userDtoPayload);
-        Customers customers = new Customers();
+        Loaders loader = new Loaders();
 
         user.setRole(roleRepository.findById(4L).get());
         String encodedPassword = bCryptPasswordEncoder.encode(userDtoPayload.getPassword());
         user.setPassword(encodedPassword);
 
         userRepository.save(user);
-        customers.setUser(user);
+        loader.setUser(user);
 
-        customerRepository.save(customers);
+        loadersRepository.save(loader);
         return convertUserToUserDto(user);
     }
 
@@ -231,5 +234,23 @@ public class UserService {
         }
 
         return convertUserToUserDto(user);
+    }
+
+    public boolean deleteUser(User user) {
+        if (customerRepository.findByUser(user).isPresent()) {
+            customerRepository.delete(customerRepository.findByUser(user).get());
+        }
+
+        if (loadersRepository.findByUser(user).isPresent()) {
+            loadersRepository.delete(loadersRepository.findByUser(user).get());
+        }
+
+        if (driversRepository.findByUser(user).isPresent()) {
+            driversRepository.delete(driversRepository.findByUser(user).get());
+        }
+
+        userRepository.delete(user);
+
+        return userRepository.findById(user.getId()).isEmpty();
     }
 }

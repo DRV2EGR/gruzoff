@@ -11,8 +11,7 @@ import lombok.NoArgsConstructor;
 @Table(name ="loaders")
 @Data
 @NoArgsConstructor
-public class Loaders implements Serializable {
-    @Id
+public class Loaders extends BaseEntity implements Serializable {
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
