@@ -210,6 +210,10 @@ public class UserService {
     public UserDto changeInfo(User user, UserDtoPayload userDtoPayload) throws NoSuchFieldException, IllegalAccessException {
         System.out.println(userDtoPayload.getClass().getDeclaredFields().length);
         for (Field obj : userDtoPayload.getClass().getDeclaredFields()) {
+            if (obj.getName().equals("username") || obj.getName().equals("email")) {
+                continue;
+            }
+
             Field field = user.getClass().getDeclaredField(obj.getName());
             field.setAccessible(true);
             Field field1 = userDtoPayload.getClass().getDeclaredField(obj.getName());
