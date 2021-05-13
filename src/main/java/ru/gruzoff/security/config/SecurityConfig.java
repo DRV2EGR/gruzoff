@@ -18,8 +18,8 @@ import ru.gruzoff.security.jwt.JwtTokenProvider;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     // AUTH ENDPOINTS
-    private static final String AUTH_ENDPOINT = "/api/auth/**";
-    private static final String SIGNUP_ENDPOINT = "/api/signup/**";
+    private static final String AUTH_ENDPOINT = "/v1/api/auth/**";
+    private static final String SIGNUP_ENDPOINT = "/v1/api/signup/**";
 
     private static final String PUBLIC_USERS_ENDPOINT = "/v1/api/user/public/**";
     private static final String PRIVATE_USERS_ENDPOINT = "/v1/api/user/private/**";
