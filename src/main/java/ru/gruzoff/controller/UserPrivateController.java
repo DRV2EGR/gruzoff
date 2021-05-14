@@ -11,6 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import ru.gruzoff.dto.LikeDto;
 import ru.gruzoff.dto.OrderDto;
+import ru.gruzoff.dto.ResponseStatusOperationDto;
 import ru.gruzoff.dto.UserDto;
 import ru.gruzoff.entity.Likes;
 import ru.gruzoff.entity.Order;
@@ -115,8 +116,11 @@ public class UserPrivateController {
     }
 
     @DeleteMapping("/user")
-    public void deleteUser() {
-        userService.deleteUser(getAuthentificatedUser());
+    public ResponseEntity<ResponseStatusOperationDto> deleteUser() {
+        if (userService.deleteUser(getAuthentificatedUser())) {
+            return ResponseEntity.ok(new ResponseStatusOperationDto("OK"));
+        }
 
+        return ResponseEntity.ok(new ResponseStatusOperationDto("Not completed"));
     }
 }
