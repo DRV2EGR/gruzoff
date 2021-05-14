@@ -12,8 +12,7 @@ import lombok.NoArgsConstructor;
 @Table(name ="drivers")
 @Data
 @NoArgsConstructor
-public class Drivers implements Serializable {
-    @Id
+public class Drivers extends BaseEntity implements Serializable {
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;

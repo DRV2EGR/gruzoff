@@ -1,5 +1,6 @@
 package ru.gruzoff.service;
 
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -10,13 +11,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.gruzoff.dto.UserDto;
-import ru.gruzoff.entity.Customers;
-import ru.gruzoff.entity.User;
+import ru.gruzoff.entity.*;
+import ru.gruzoff.exception.ConflictException;
+import ru.gruzoff.exception.NotFoundException;
+import ru.gruzoff.exception.UserNotFoundExeption;
 import ru.gruzoff.payload.BasicPayload;
 import ru.gruzoff.payload.UserDtoPayload;
-import ru.gruzoff.repository.CustomerRepository;
-import ru.gruzoff.repository.RoleRepository;
-import ru.gruzoff.repository.UserRepository;
+import ru.gruzoff.repository.*;
 
 /**
  * The type User service.
@@ -32,6 +33,18 @@ public class UserService {
 
     @Autowired
     private CustomerRepository customerRepository;
+
+    @Autowired
+    private OrderReposiory orderReposiory;
+
+    @Autowired
+    private LikesRepository likesRepository;
+
+    @Autowired
+    private LoadersRepository loadersRepository;
+
+    @Autowired
+    private DriversRepository driversRepository;
 
     /**
      * The B crypt password encoder.
@@ -62,6 +75,18 @@ public class UserService {
         log.info("User " + optionalUser.get().toString() + "found by username " + username);
         else log.info("User with username '" + username + "' not found.");
         return userRepository.findByUsername(username);
+    }
+
+    public User findUserByUsername(String username) {
+        return userRepository.findByUsername(username).orElseThrow(
+                () -> new UserNotFoundExeption("User with this username not found!")
+        );
+    }
+
+    public User findUserById(long userId) {
+        return userRepository.findById(userId).orElseThrow(
+                () -> new UserNotFoundExeption("User with this id not found!")
+        );
     }
 
     /**
@@ -123,31 +148,31 @@ public class UserService {
 
     public UserDto registerNewDriver(UserDtoPayload userDtoPayload) {
         User user = createNewUserAndFillBasicFields(userDtoPayload);
-        Customers customers = new Customers();
+        Drivers driver = new Drivers();
 
         user.setRole(roleRepository.findById(3L).get());
         String encodedPassword = bCryptPasswordEncoder.encode(userDtoPayload.getPassword());
         user.setPassword(encodedPassword);
 
         userRepository.save(user);
-        customers.setUser(user);
+        driver.setUser(user);
 
-        customerRepository.save(customers);
+        driversRepository.save(driver);
         return convertUserToUserDto(user);
     }
 
     public UserDto registerNewLoader(UserDtoPayload userDtoPayload) {
         User user = createNewUserAndFillBasicFields(userDtoPayload);
-        Customers customers = new Customers();
+        Loaders loader = new Loaders();
 
         user.setRole(roleRepository.findById(4L).get());
         String encodedPassword = bCryptPasswordEncoder.encode(userDtoPayload.getPassword());
         user.setPassword(encodedPassword);
 
         userRepository.save(user);
-        customers.setUser(user);
+        loader.setUser(user);
 
-        customerRepository.save(customers);
+        loadersRepository.save(loader);
         return convertUserToUserDto(user);
     }
 
@@ -164,5 +189,80 @@ public class UserService {
         userDto.setPhoneNumber(user.getPhoneNumber());
 
         return userDto;
+    }
+
+    public Order getUsersOrderByOrderId(User user, long orderid) {
+        Order order = orderReposiory.findByIdAndCustomerId(
+                orderid,
+                customerRepository.findByUser(user).orElseThrow(
+                        () -> new UserNotFoundExeption("")
+                )
+        ).orElseThrow(
+                () -> new NotFoundException("")
+        );
+
+        return order;
+    }
+
+    public void setLike(User usr_from, long id_to) {
+        User usr_to = userRepository.findById(id_to).orElseThrow(
+                () -> new UserNotFoundExeption("")
+        );
+
+        Likes like = new Likes();
+        like.setUser_from(usr_from);
+        like.setUser_to(usr_to);
+
+        // SAVE TRANSISTENT
+        likesRepository.save(like);
+
+        usr_from.getPuttedLikes().add(like);
+        userRepository.save(usr_from);
+        usr_to.getRecievedLikes().add(like);
+        userRepository.save(usr_to);
+    }
+
+    public UserDto changeInfo(User user, UserDtoPayload userDtoPayload) throws NoSuchFieldException, IllegalAccessException {
+        System.out.println(userDtoPayload.getClass().getDeclaredFields().length);
+        for (Field obj : userDtoPayload.getClass().getDeclaredFields()) {
+            if (obj.getName().equals("username") || obj.getName().equals("email")) {
+                continue;
+            }
+
+            Field field = user.getClass().getDeclaredField(obj.getName());
+            field.setAccessible(true);
+            Field field1 = userDtoPayload.getClass().getDeclaredField(obj.getName());
+            field1.setAccessible(true);
+
+            if (field1.get(userDtoPayload) != null) {
+                field.set(user, (String) field1.get(userDtoPayload));
+            }
+        }
+
+        try {
+            userRepository.save(user);
+        } catch (Exception e) {
+            throw new ConflictException("Incorrect value");
+        }
+
+        return convertUserToUserDto(user);
+    }
+
+    public boolean deleteUser(User user) {
+        if (customerRepository.findByUser(user).isPresent()) {
+            customerRepository.delete(customerRepository.findByUser(user).get());
+        }
+
+        if (loadersRepository.findByUser(user).isPresent()) {
+            loadersRepository.delete(loadersRepository.findByUser(user).get());
+        }
+
+        if (driversRepository.findByUser(user).isPresent()) {
+            driversRepository.delete(driversRepository.findByUser(user).get());
+        }
+
+        userRepository.delete(user);
+
+        return userRepository.findById(user.getId()).isEmpty();
     }
 }

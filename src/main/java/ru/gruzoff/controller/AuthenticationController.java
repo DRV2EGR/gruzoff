@@ -55,7 +55,7 @@ public class AuthenticationController {
             return ResponseEntity.ok(jwtAuthDto);
         }
         catch (IllegalArgumentException e) {
-            throw new JwtInvalidRefreshTokenException();
+            throw new JwtInvalidRefreshTokenException("");
         }
     }
 
