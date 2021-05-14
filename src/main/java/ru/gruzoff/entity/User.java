@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -15,6 +16,7 @@ import lombok.NoArgsConstructor;
 @Table(name ="users")
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 @Inheritance(strategy = InheritanceType.JOINED)
 public class User extends BaseEntity{
     /**
@@ -114,6 +116,14 @@ public class User extends BaseEntity{
     public User(long id, String username) {
         this.setId(id);
         this.setUsername(username);
+    }
+
+    public User(String firstName, String secondName, String lastName, String email, String phoneNumber) {
+        this.firstName = firstName;
+        this.secondName = secondName;
+        this.lastName = lastName;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
     }
 
     @Override

@@ -15,5 +15,7 @@ public class Car extends BaseEntity {
     protected int size;
     protected int maxPeopleCapacity;
 
+    protected int type;
+
     protected String gosNomber;
 }

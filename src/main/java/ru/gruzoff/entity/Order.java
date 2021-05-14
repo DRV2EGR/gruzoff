@@ -3,11 +3,15 @@ package ru.gruzoff.entity;
 import java.util.List;
 
 import javax.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "orders")
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Order extends BaseEntity {
     @OneToOne
     @JoinColumn(name = "customerId")
@@ -36,4 +40,6 @@ public class Order extends BaseEntity {
     @ManyToMany
     @JoinColumn(name = "extra_people_on_order_id", referencedColumnName = "id")
     protected List<Customers> extraCustomers;
+
+
 }

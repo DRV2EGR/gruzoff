@@ -2,21 +2,21 @@ package ru.gruzoff.entity;
 
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "order_details")
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class OrderDetails extends BaseEntity {
-    protected String country;
-    protected String town;
-    protected String street;
-    protected String houseNomber;
-    protected String extraHouseDefinition;
+    @ManyToOne
+    protected Adress adressFrom;
+    @ManyToOne
+    protected Adress adressTo;
 
     protected Date dateTime;
     protected int timeOnOrder;

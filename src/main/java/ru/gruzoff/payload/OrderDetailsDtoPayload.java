@@ -1,4 +1,4 @@
-package ru.gruzoff.dto;
+package ru.gruzoff.payload;
 
 import java.util.Date;
 
@@ -11,12 +11,11 @@ import ru.gruzoff.entity.Adress;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderDetailsDto {
-    protected AdressDto adressFrom;
-    protected AdressDto adressTo;
+public class OrderDetailsDtoPayload {
+    protected Adress adressFrom;
+    protected Adress adressTo;
 
     protected Date dateTime;
-    protected int timeOnOrder;
 
     protected String comment;
 }

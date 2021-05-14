@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,6 +13,7 @@ import lombok.NoArgsConstructor;
 @Table(name ="drivers")
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class Drivers extends BaseEntity implements Serializable {
     @OneToOne
     @JoinColumn(name = "user_id")
