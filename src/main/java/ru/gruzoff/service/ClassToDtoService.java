@@ -5,10 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.gruzoff.dto.CarDto;
-import ru.gruzoff.dto.OrderDetailsDto;
-import ru.gruzoff.dto.OrderDto;
-import ru.gruzoff.dto.UserDto;
+import ru.gruzoff.dto.*;
 import ru.gruzoff.entity.*;
 
 @Service
@@ -64,5 +61,17 @@ public class ClassToDtoService
         carDto.setGosNomber(car.getGosNomber());
 
         return carDto;
+    }
+
+    public UserPublicDto convertUserToUserPublicDto(User user) {
+        return new UserPublicDto(
+                user.getId(),
+                user.getFirstName(),
+                user.getSecondName(),
+                user.getLastName(),
+                user.getUsername(),
+                user.getEmail(),
+                user.getPhoneNumber()
+        );
     }
 }
