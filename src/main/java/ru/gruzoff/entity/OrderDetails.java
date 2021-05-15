@@ -19,7 +19,7 @@ public class OrderDetails extends BaseEntity {
     protected Adress adressTo;
 
     protected Date dateTime;
-    protected int timeOnOrder;
+    protected float timeOnOrder;
 
     @Column(columnDefinition = "TEXT")
     protected String comment;

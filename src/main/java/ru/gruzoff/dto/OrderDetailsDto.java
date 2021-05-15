@@ -16,7 +16,7 @@ public class OrderDetailsDto {
     protected AdressDto adressTo;
 
     protected Date dateTime;
-    protected int timeOnOrder;
+    protected float timeOnOrder;
 
     protected String comment;
 }

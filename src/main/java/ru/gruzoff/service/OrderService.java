@@ -94,18 +94,19 @@ public class OrderService {
         adressRepository.save(adressFrom);
         adressRepository.save(adressTo);
 
+        Float time = geocoder.GeocodeRoute(coords0.get(0), coords0.get(1), coords1.get(0), coords1.get(1));
+        System.out.println(time);
+
         OrderDetails orderDetails = new OrderDetails(
                 adressFrom,
                 adressTo,
                 createOrderDtoPayload.getOrderDetails().getDateTime(),
-                -1,
+                time,
                 createOrderDtoPayload.getOrderDetails().getComment()
         );
 
 
         orderDetailsReposirory.save(orderDetails);
-
-        //System.out.println(geocoder.GeocodeSync(orderDetails.getAdressFrom().toString()));
 
         Order order = new Order(
                 customerRepository.findByUser(user).orElseThrow(
