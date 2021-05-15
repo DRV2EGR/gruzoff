@@ -3,18 +3,20 @@ package ru.gruzoff.dto;
 import java.util.Date;
 
 import javax.persistence.Column;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import ru.gruzoff.entity.Adress;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class OrderDetailsDto {
-    protected String country;
-    protected String town;
-    protected String street;
-    protected String houseNomber;
-    protected String extraHouseDefinition;
+    protected AdressDto adressFrom;
+    protected AdressDto adressTo;
 
     protected Date dateTime;
-    protected int timeOnOrder;
+    protected float timeOnOrder;
 
     protected String comment;
 }

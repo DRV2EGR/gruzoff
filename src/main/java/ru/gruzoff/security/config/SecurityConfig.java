@@ -24,6 +24,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String PUBLIC_USERS_ENDPOINT = "/v1/api/user/public/**";
     private static final String PRIVATE_USERS_ENDPOINT = "/v1/api/user/private/**";
 
+    private static final String ORDERS_ENDPOINT = "/v1/api/orders/**";
+
     private final JwtTokenProvider jwtTokenProvider;
 
     /**
@@ -53,6 +55,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers(AUTH_ENDPOINT).permitAll()
                     .antMatchers(SIGNUP_ENDPOINT).permitAll()
                     .antMatchers(PUBLIC_USERS_ENDPOINT).permitAll()
+                    .antMatchers(ORDERS_ENDPOINT).hasAnyRole("USER", "ADMIN", "MANAGER")
+                    .antMatchers("/v1/api/orders/admin/**").hasAnyRole("ADMIN", "MANAGER")
                     .antMatchers(PRIVATE_USERS_ENDPOINT).hasAnyRole("USER", "ADMIN")
                     .anyRequest().authenticated()
                 .and()

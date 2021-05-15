@@ -1,26 +1,21 @@
-package ru.gruzoff.entity;
+package ru.gruzoff.payload;
 
 import java.util.Date;
 
-import javax.persistence.*;
+import javax.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.gruzoff.entity.Adress;
 
-@Entity
-@Table(name = "order_details")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderDetails extends BaseEntity {
-    @ManyToOne
+public class OrderDetailsDtoPayload {
     protected Adress adressFrom;
-    @ManyToOne
     protected Adress adressTo;
 
     protected Date dateTime;
-    protected float timeOnOrder;
 
-    @Column(columnDefinition = "TEXT")
     protected String comment;
 }
