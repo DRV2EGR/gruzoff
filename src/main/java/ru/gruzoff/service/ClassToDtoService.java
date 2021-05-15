@@ -71,7 +71,7 @@ public class ClassToDtoService
                 car.getHeight(),
                 car.getSize(),
                 car.getMaxPeopleCapacity(),
-                car.getType(),
+                (int) car.getType().getId(),
                 car.getGosNomber()
         );
     }

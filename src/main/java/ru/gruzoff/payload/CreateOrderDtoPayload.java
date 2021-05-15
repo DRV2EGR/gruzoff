@@ -12,7 +12,9 @@ import ru.gruzoff.entity.*;
 @NoArgsConstructor
 public class CreateOrderDtoPayload {
     long customerId;
-    int car_type;
+    long car_type;
+
+    int numOfLoaders;
 
     protected OrderDetailsDtoPayload orderDetails;
     protected List<UserDtoPayload> extraCustomers;

@@ -25,7 +25,7 @@ public class Order extends BaseEntity {
     @JoinColumn(name = "carId")
     Car carId;
 
-    int price;
+    float price;
 
     protected String status;
 

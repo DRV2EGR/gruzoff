@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.gruzoff.dto.OrderDto;
 import ru.gruzoff.entity.*;
+import ru.gruzoff.exception.NotFoundException;
 import ru.gruzoff.exception.UserNotFoundExeption;
 import ru.gruzoff.payload.CreateOrderDtoPayload;
 import ru.gruzoff.payload.UserDtoPayload;
@@ -50,9 +51,16 @@ public class OrderService {
     @Autowired
     Geocoder geocoder;
 
+    @Autowired
+    CarTypeRepository carTypeRepository;
+
     public OrderDto createNewOrder(CreateOrderDtoPayload createOrderDtoPayload) throws Exception {
         User user = userService.findById(createOrderDtoPayload.getCustomerId()).orElseThrow(
                 () -> new UserNotFoundExeption("Main customer not found!")
+        );
+
+        CarType carType = carTypeRepository.findById(createOrderDtoPayload.getCar_type()).orElseThrow(
+                () -> new NotFoundException("No such car type")
         );
 
         List<Customers> extraCustomers = new ArrayList<>();
@@ -94,8 +102,9 @@ public class OrderService {
         adressRepository.save(adressFrom);
         adressRepository.save(adressTo);
 
-        Float time = geocoder.GeocodeRoute(coords0.get(0), coords0.get(1), coords1.get(0), coords1.get(1));
-        System.out.println(time);
+        float time = geocoder.GeocodeRoute(coords0.get(0), coords0.get(1), coords1.get(0), coords1.get(1));
+        //System.out.println(time);
+        float price = (time/60/60) * carType.getPricePerHour() + (time/60/60) * 1000 * createOrderDtoPayload.getNumOfLoaders();
 
         OrderDetails orderDetails = new OrderDetails(
                 adressFrom,
@@ -114,7 +123,7 @@ public class OrderService {
                     ),
                 null,
                 null,
-                -1,
+                price,
                 "CREATED",
                 orderDetails, /*ord det*/
                 new ArrayList<>(),

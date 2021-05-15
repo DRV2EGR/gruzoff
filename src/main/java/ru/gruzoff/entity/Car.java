@@ -7,7 +7,6 @@ import lombok.Data;
 @Table(name = "cars")
 @Data
 public class Car extends BaseEntity {
-    protected int pricePerHour;
     protected int max_weight;
     protected int length;
     protected int width;
@@ -15,7 +14,8 @@ public class Car extends BaseEntity {
     protected int size;
     protected int maxPeopleCapacity;
 
-    protected int type;
+    @ManyToOne
+    protected CarType type;
 
     protected String gosNomber;
 }

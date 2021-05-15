@@ -39,9 +39,13 @@ INSERT INTO user_likes (id, user_id_from, user_id_to) VALUES
 INSERT INTO comments (id, comment_text, rating, user_id_from, user_id_to) VALUES
 (1, '', 5.0, 1, 2);
 
-INSERT INTO cars (id, gos_nomber, height, length, max_people_capacity, max_weight, price_per_hour, size, width, type) VALUES
-(1, 'Р123ОМ123', 2.7, 3.5, 5, 5000, 2000, 15, 2, 1),
-(2, 'К325ОТ777', 3, 6, 5, 9000, 3000, 25, 2.5, 2);
+INSERT INTO car_types (id, price_per_hour, description) VALUES
+(1, 2000, ''),
+(2, 3000, '');
+
+INSERT INTO cars (id, gos_nomber, height, length, max_people_capacity, max_weight, size, width, type_id) VALUES
+(1, 'Р123ОМ123', 2.7, 3.5, 5, 5000, 15, 2, 1),
+(2, 'К325ОТ777', 3, 6, 5, 9000, 25, 2.5, 2);
 
 INSERT INTO cars_validity (id, is_valid, reason_of_crash, car_id) VALUES
 (1, true, '', 1),

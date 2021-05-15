@@ -20,7 +20,7 @@ public class OrderDto {
 
     protected CarDto car;
 
-    protected int price;
+    protected float price;
     protected String status;
     protected OrderDetailsDto orderDetails;
 
