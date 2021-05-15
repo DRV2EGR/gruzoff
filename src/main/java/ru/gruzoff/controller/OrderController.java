@@ -1,5 +1,8 @@
 package ru.gruzoff.controller;
 
+import java.io.IOException;
+
+import org.apache.tomcat.util.json.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +39,7 @@ public class OrderController {
     }
 
     @PostMapping("/create_order")
-    public ResponseEntity<OrderDto> createOrder(@RequestBody CreateOrderDtoPayload createOrderDtoPayload) {
+    public ResponseEntity<OrderDto> createOrder(@RequestBody CreateOrderDtoPayload createOrderDtoPayload) throws Exception {
         User currUser = getAuthentificatedUser();
         if (!currUser.getRole().getName().equals("ROLE_ADMIN")) {
             createOrderDtoPayload.setCustomerId(currUser.getId());

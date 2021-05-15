@@ -52,10 +52,12 @@ public class ClassToDtoService
     public OrderDetailsDto convertOrderDetailsToOrderDetailsDto(OrderDetails orderDetails) {
         OrderDetailsDto orderDetailsDto = new OrderDetailsDto();
 
+        orderDetailsDto.setAdressFrom(convertAdressToAdressDto(orderDetails.getAdressFrom()));
+        orderDetailsDto.setAdressTo(convertAdressToAdressDto(orderDetails.getAdressTo()));
+
         orderDetailsDto.setComment(orderDetails.getComment());
         orderDetailsDto.setTimeOnOrder(orderDetails.getTimeOnOrder());
         orderDetailsDto.setDateTime(orderDetails.getDateTime());
-        orderDetailsDto.setTimeOnOrder(orderDetails.getTimeOnOrder());
 
         return orderDetailsDto;
     }

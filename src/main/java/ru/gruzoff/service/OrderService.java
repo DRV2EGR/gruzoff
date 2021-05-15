@@ -1,9 +1,11 @@
 package ru.gruzoff.service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.apache.tomcat.util.json.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.gruzoff.dto.OrderDto;
@@ -45,7 +47,10 @@ public class OrderService {
     @Autowired
     AdressRepository adressRepository;
 
-    public OrderDto createNewOrder(CreateOrderDtoPayload createOrderDtoPayload) {
+    @Autowired
+    Geocoder geocoder;
+
+    public OrderDto createNewOrder(CreateOrderDtoPayload createOrderDtoPayload) throws Exception {
         User user = userService.findById(createOrderDtoPayload.getCustomerId()).orElseThrow(
                 () -> new UserNotFoundExeption("Main customer not found!")
         );
@@ -74,8 +79,17 @@ public class OrderService {
             extraCustomers.add(customer);
         }
 
+
+
         Adress adressFrom = createOrderDtoPayload.getOrderDetails().getAdressFrom();
+        List<Float> coords0 = geocoder.GeocodeSync(adressFrom.toString());
+        adressFrom.setLatitude(coords0.get(0));
+        adressFrom.setLongitude(coords0.get(1));
+
         Adress adressTo = createOrderDtoPayload.getOrderDetails().getAdressTo();
+        List<Float> coords1 = geocoder.GeocodeSync(adressTo.toString());
+        adressTo.setLatitude(coords1.get(0));
+        adressTo.setLongitude(coords1.get(1));
 
         adressRepository.save(adressFrom);
         adressRepository.save(adressTo);
@@ -90,6 +104,8 @@ public class OrderService {
 
 
         orderDetailsReposirory.save(orderDetails);
+
+        //System.out.println(geocoder.GeocodeSync(orderDetails.getAdressFrom().toString()));
 
         Order order = new Order(
                 customerRepository.findByUser(user).orElseThrow(

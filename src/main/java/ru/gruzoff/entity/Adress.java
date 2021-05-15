@@ -17,4 +17,12 @@ public class Adress extends BaseEntity {
     protected String street;
     protected String houseNomber;
     protected String extraHouseDefinition;
+
+    protected float latitude;
+    protected float longitude;
+
+    @Override
+    public String toString() {
+        return country + ',' + town + ',' + street + ',' + houseNomber + ',' + extraHouseDefinition;
+    }
 }
