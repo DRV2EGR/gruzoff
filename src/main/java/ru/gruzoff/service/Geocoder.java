@@ -18,6 +18,7 @@ import java.util.Map;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import ru.gruzoff.exception.BadRequestException;
 
 @Service
 public class Geocoder {
@@ -42,6 +43,9 @@ public class Geocoder {
         int responseCode = con.getResponseCode();
         //System.out.println("\nSending 'GET' request to URL : " + url);
         //System.out.println("Response Code : " + responseCode);
+        if (responseCode != 200) {
+            throw new BadRequestException("Bad adress");
+        }
 
         Reader in = new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8));
         StringBuilder sb = new StringBuilder();

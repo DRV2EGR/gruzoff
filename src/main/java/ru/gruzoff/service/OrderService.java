@@ -2,6 +2,7 @@ package ru.gruzoff.service;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -136,5 +137,17 @@ public class OrderService {
         userRepository.save(user);
 
         return classToDtoService.convertOrderToOrderDto(order);
+    }
+
+    public List<OrderDto> findOrdersBetweenDates(User user, Date d1, Date d2) {
+        List<OrderDto> ordersRes = new ArrayList<>();
+        for (Order order : user.getOrders()) {
+            if (order.getOrderDetails().getDateTime().after(d1)
+                    && order.getOrderDetails().getDateTime().before(d2)) {
+                ordersRes.add(classToDtoService.convertOrderToOrderDto(order));
+            }
+        }
+
+        return ordersRes;
     }
 }
