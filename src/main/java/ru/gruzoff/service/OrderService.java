@@ -133,7 +133,8 @@ public class OrderService {
                 "CREATED",
                 orderDetails, /*ord det*/
                 new ArrayList<>(),
-                extraCustomers
+                extraCustomers,
+                false
         );
 
         orderReposiory.save(order);
