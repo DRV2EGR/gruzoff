@@ -1,4 +1,4 @@
-# Gruzoff - сервис грузоперевозок
+# Gruzoff - сервис грузоперевозок [![CircleCI](https://circleci.com/gh/DRV2VNA/gruzoff.svg?style=svg)](https://circleci.com/gh/circleci/circleci-docs)
 ### Курсовая работа по предмету _Шаблоны программных платформ языка Java_
 ----
 ## 1. Для запуска проекта: 
