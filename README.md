@@ -1,5 +1,11 @@
 # Gruzoff - сервис грузоперевозок [![CircleCI](https://circleci.com/gh/DRV2VNA/gruzoff.svg?style=svg)](https://circleci.com/gh/circleci/circleci-docs)
 ### Курсовая работа по предмету _Шаблоны программных платформ языка Java_
+![https://img.shields.io/github/languages/top/drv2vna/gruzoff](https://img.shields.io/github/languages/top/drv2vna/gruzoff)
+![https://img.shields.io/github/languages/code-size/drv2vna/gruzoff](https://img.shields.io/github/languages/code-size/drv2vna/gruzoff)
+![dependencies](https://img.shields.io/librariesio/github/drv2vna/gruzoff)
+![commits](https://img.shields.io/github/commit-activity/w/drv2vna/gruzoff)
+[![Discord](https://img.shields.io/discord/807292304405954580?label=Discord)](https://discord.gg/Sxtzaquw94)
+
 ----
 ## 1. Для запуска проекта: 
 Запуск backend части
