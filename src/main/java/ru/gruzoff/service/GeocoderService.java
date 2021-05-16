@@ -21,7 +21,7 @@ import org.springframework.stereotype.Service;
 import ru.gruzoff.exception.BadRequestException;
 
 @Service
-public class Geocoder {
+public class GeocoderService {
     @Value("${geocoding.api.key}")
     private String API_KEY;
 

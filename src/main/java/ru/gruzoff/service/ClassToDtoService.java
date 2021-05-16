@@ -52,6 +52,7 @@ public class ClassToDtoService
     public OrderDetailsDto convertOrderDetailsToOrderDetailsDto(OrderDetails orderDetails) {
         OrderDetailsDto orderDetailsDto = new OrderDetailsDto();
 
+        orderDetailsDto.setLoadersCapacity(orderDetails.getLoadersCapacity());
         orderDetailsDto.setAdressFrom(convertAdressToAdressDto(orderDetails.getAdressFrom()));
         orderDetailsDto.setAdressTo(convertAdressToAdressDto(orderDetails.getAdressTo()));
 
@@ -101,6 +102,7 @@ public class ClassToDtoService
         }
 
         return new OrderDto(
+                order.getId(),
                 userService.convertUserToUserDto(order.getCustomerId().getUser()),
 
                 order.getDriverId() != null ? userService.convertUserToUserDto(order.getDriverId().getUser()) : null ,
