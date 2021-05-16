@@ -41,5 +41,7 @@ public class Order extends BaseEntity {
     @JoinColumn(name = "extra_people_on_order_id", referencedColumnName = "id")
     protected List<Customers> extraCustomers;
 
+    protected boolean sended;
+
 
 }

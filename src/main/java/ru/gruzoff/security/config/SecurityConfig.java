@@ -30,6 +30,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private static final String CARS_ENDPOINT = "/v1/api/cars/**";
 
+    private static final String MANAGER_ENDPOINT = "/v1/api/manager/**";
+
     private final JwtTokenProvider jwtTokenProvider;
 
     /**
@@ -73,6 +75,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers(CARS_ENDPOINT).permitAll()
                     .antMatchers( "/v1/api/cars/private/**").hasAnyRole("DRIVER", "ADMIN", "MANAGER")
 
+                    .antMatchers(MANAGER_ENDPOINT).hasAnyRole("ADMIN", "MANAGER")
                     .anyRequest().authenticated()
                 .and()
                 .formLogin().disable()

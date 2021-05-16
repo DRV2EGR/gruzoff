@@ -149,4 +149,24 @@ public class CarService {
 
         return carDtoList;
     }
+
+    public void changeCarValid(long carId, int v, String reason) {
+        CarValidity carValidity = carValidityRepository.findByCarId(
+                carRepository.findById(carId).orElseThrow(
+                        () -> new NotFoundException("No such car")
+                )
+        ).orElseThrow(
+                () -> new NotFoundException("No such car valid")
+        );
+
+        if (v == 1) {
+            carValidity.setValid(true);
+        } else {
+            carValidity.setValid(false);
+        }
+
+        carValidity.setReasonOfCrash(reason);
+
+        carValidityRepository.save(carValidity);
+    }
 }
