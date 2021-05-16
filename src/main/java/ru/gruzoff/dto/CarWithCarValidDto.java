@@ -1,16 +1,13 @@
-package ru.gruzoff.entity;
+package ru.gruzoff.dto;
 
-import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
-@Table(name = "cars")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Car extends BaseEntity {
+public class CarWithCarValidDto {
     protected int max_weight;
     protected int length;
     protected int width;
@@ -18,8 +15,9 @@ public class Car extends BaseEntity {
     protected int size;
     protected int maxPeopleCapacity;
 
-    @ManyToOne
-    protected CarType type;
+    protected CarTypeDto type;
 
     protected String gosNomber;
+
+    protected CarValidityDto validity;
 }
