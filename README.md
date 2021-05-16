@@ -3,7 +3,7 @@
 ![https://img.shields.io/github/languages/top/drv2vna/gruzoff](https://img.shields.io/github/languages/top/drv2vna/gruzoff)
 ![https://img.shields.io/github/languages/code-size/drv2vna/gruzoff](https://img.shields.io/github/languages/code-size/drv2vna/gruzoff)
 ![dependencies](https://img.shields.io/librariesio/github/drv2vna/gruzoff)
-![commits](https://img.shields.io/github/commit-activity/w/drv2vna/gruzoff)
+![commits](https://img.shields.io/github/commit-activity/m/drv2vna/gruzoff)
 [![Discord](https://img.shields.io/discord/807292304405954580?label=Discord)](https://discord.gg/Sxtzaquw94)
 
 ----
