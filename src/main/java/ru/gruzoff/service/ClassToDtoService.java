@@ -115,4 +115,33 @@ public class ClassToDtoService
                 extraCusDto
         );
     }
+
+    public CarTypeDto convertCarTypeToCarTypeDto(CarType carType) {
+        return new CarTypeDto(
+                carType.getId(),
+                carType.getPricePerHour(),
+                carType.getDescription()
+        );
+    }
+
+    public CarValidityDto convertCarValidityToCarValidityDto(CarValidity carValidity) {
+        return new CarValidityDto(
+                carValidity.isValid(),
+                carValidity.getReasonOfCrash()
+        );
+    }
+
+    public CarWithCarValidDto convertCarToCarWithCarValidDto(Car car, CarValidity carValidity) {
+        return new CarWithCarValidDto(
+                car.getMax_weight(),
+                car.getLength(),
+                car.getWidth(),
+                car.getHeight(),
+                car.getSize(),
+                car.getMaxPeopleCapacity(),
+                convertCarTypeToCarTypeDto(car.getType()),
+                car.getGosNomber(),
+                convertCarValidityToCarValidityDto(carValidity)
+        );
+    }
 }

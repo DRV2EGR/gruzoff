@@ -1,16 +1,17 @@
-package ru.gruzoff.entity;
+package ru.gruzoff.payload;
 
-import javax.persistence.*;
+import javax.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.gruzoff.entity.CarType;
 
-@Entity
-@Table(name = "cars")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Car extends BaseEntity {
+public class AddNewCarDtoPayload {
+    protected long driverId;
+
     protected int max_weight;
     protected int length;
     protected int width;
@@ -18,8 +19,7 @@ public class Car extends BaseEntity {
     protected int size;
     protected int maxPeopleCapacity;
 
-    @ManyToOne
-    protected CarType type;
+    protected long type;
 
     protected String gosNomber;
 }
