@@ -1,9 +1,11 @@
 package ru.gruzoff.service;
 
 import java.lang.reflect.Field;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.UUID;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +53,9 @@ public class UserService {
      */
     @Autowired
     public BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    @Autowired
+    MailService mailService;
 
     /**
      * Password encoder b crypt password encoder.
@@ -103,6 +108,18 @@ public class UserService {
         return userRepository.findById(userId);
     }
 
+    public void activateUser(String encodedUserActivationCode) {
+
+        User activatedUser = userRepository.findByActivationCode(encodedUserActivationCode).orElseThrow(
+                () -> { throw new NotFoundException("Activation code not found");}
+        );
+
+        activatedUser.setTimeOfAccountCreation(LocalDateTime.now());
+
+        activatedUser.setActivationCode(null);
+        userRepository.save(activatedUser);
+    }
+
     public User createNewUserAndFillBasicFields(BasicPayload basicPayload) {
         User user = new User();
 
@@ -142,6 +159,12 @@ public class UserService {
         userRepository.save(user);
         customers.setUser(user);
 
+        user.setActivationCode(UUID.randomUUID().toString());
+        user.setCreatedActivationCode(LocalDateTime.now());
+
+        mailService.send(user.getEmail(), "Активация аккаунта.", mailService.completeRegistrationEmail(user.getSecondName(),
+                user.getLastName(), "заказчика", user.getActivationCode()));
+
         customerRepository.save(customers);
         return convertUserToUserDto(user);
     }
@@ -153,6 +176,12 @@ public class UserService {
         user.setRole(roleRepository.findById(3L).get());
         String encodedPassword = bCryptPasswordEncoder.encode(userDtoPayload.getPassword());
         user.setPassword(encodedPassword);
+
+        user.setActivationCode(UUID.randomUUID().toString());
+        user.setCreatedActivationCode(LocalDateTime.now());
+
+        mailService.send(user.getEmail(), "Активация аккаунта.", mailService.completeRegistrationEmail(user.getSecondName(),
+                user.getLastName(), "водителя", user.getActivationCode()));
 
         userRepository.save(user);
         driver.setUser(user);
@@ -168,6 +197,12 @@ public class UserService {
         user.setRole(roleRepository.findById(4L).get());
         String encodedPassword = bCryptPasswordEncoder.encode(userDtoPayload.getPassword());
         user.setPassword(encodedPassword);
+
+        user.setActivationCode(UUID.randomUUID().toString());
+        user.setCreatedActivationCode(LocalDateTime.now());
+
+        mailService.send(user.getEmail(), "Активация аккаунта.", mailService.completeRegistrationEmail(user.getSecondName(),
+                user.getLastName(), "грузчика", user.getActivationCode()));
 
         userRepository.save(user);
         loader.setUser(user);
