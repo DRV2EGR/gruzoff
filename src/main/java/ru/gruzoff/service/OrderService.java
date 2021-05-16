@@ -1,12 +1,7 @@
 package ru.gruzoff.service;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
-import org.apache.tomcat.util.json.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.gruzoff.dto.OrderDto;
@@ -50,7 +45,7 @@ public class OrderService {
     AdressRepository adressRepository;
 
     @Autowired
-    Geocoder geocoder;
+    GeocoderService geocoder;
 
     @Autowired
     CarTypeRepository carTypeRepository;
@@ -105,13 +100,15 @@ public class OrderService {
 
         float time = geocoder.GeocodeRoute(coords0.get(0), coords0.get(1), coords1.get(0), coords1.get(1));
         //System.out.println(time);
-        float price = (time/60/60) * carType.getPricePerHour() + (time/60/60) * 1000 * createOrderDtoPayload.getNumOfLoaders();
+        float price = (time/60/60) * carType.getPricePerHour() +
+                (createOrderDtoPayload.getOrderDetails().getTimeOnOrder()/60/60) * 1000 * createOrderDtoPayload.getNumOfLoaders();
 
         OrderDetails orderDetails = new OrderDetails(
                 adressFrom,
                 adressTo,
                 createOrderDtoPayload.getOrderDetails().getDateTime(),
                 time,
+                createOrderDtoPayload.getNumOfLoaders(),
                 createOrderDtoPayload.getOrderDetails().getComment()
         );
 
@@ -149,5 +146,156 @@ public class OrderService {
         }
 
         return ordersRes;
+    }
+
+    public List<OrderDto> findOrdersOnDate(User user, Date d1) {
+        List<OrderDto> ordersRes = new ArrayList<>();
+
+        if (driversRepository.findByUser(user).isPresent()) {
+            for (Optional<Order> opOrder : orderReposiory.findAllByDriverId(driversRepository.findByUser(user).get())) {
+                if (opOrder.get().getOrderDetails().getDateTime().compareTo(d1) == 0) {
+                    ordersRes.add(classToDtoService.convertOrderToOrderDto(opOrder.get()));
+                }
+            }
+        }
+
+        if (loadersRepository.findByUser(user).isPresent()) {
+            Loaders loader = loadersRepository.findByUser(user).get();
+            for (Optional<Order> opOrder : orderReposiory.findAllByLoadersContaining(loader)) {
+                if (opOrder.get().getOrderDetails().getDateTime().compareTo(d1) == 0) {
+                    ordersRes.add(classToDtoService.convertOrderToOrderDto(opOrder.get()));
+                }
+            }
+        }
+
+        return ordersRes;
+    }
+
+    public List<OrderDto> findAllWorkerOrders(User user) {
+        List<OrderDto> ordersRes = new ArrayList<>();
+
+        if (driversRepository.findByUser(user).isPresent()) {
+            for (Optional<Order> opOrder : orderReposiory.findAllByDriverId(driversRepository.findByUser(user).get())) {
+                ordersRes.add(classToDtoService.convertOrderToOrderDto(opOrder.get()));
+            }
+        }
+
+        if (loadersRepository.findByUser(user).isPresent()) {
+            Loaders loader = loadersRepository.findByUser(user).get();
+            for (Optional<Order> opOrder : orderReposiory.findAllByLoadersContaining(loader)) {
+                ordersRes.add(classToDtoService.convertOrderToOrderDto(opOrder.get()));
+            }
+        }
+
+        return ordersRes;
+    }
+
+    public boolean takeOrderToDriver(User user, long orderId) {
+        Drivers driver = driversRepository.findByUser(user).orElseThrow(
+                () -> new UserNotFoundExeption("No such driver")
+        );
+
+        Order order = orderReposiory.findById(orderId).orElseThrow(
+                () -> new NotFoundException("No such order")
+        );
+
+        if (order.getDriverId() != null) {
+            return false;
+        }
+
+        order.setDriverId(driver);
+
+
+        if (order.getOrderDetails().getLoadersCapacity() <= order.getLoaders().size() && order.getDriverId() != null) {
+            order.setStatus("WAIT_APPROVE");
+        }
+
+        orderReposiory.save(order);
+        return true;
+    }
+
+    public boolean takeOrderToLoader(User user, long orderId) {
+        Loaders loader = loadersRepository.findByUser(user).orElseThrow(
+                () -> new UserNotFoundExeption("No such loader")
+        );
+
+        Order order = orderReposiory.findById(orderId).orElseThrow(
+                () -> new NotFoundException("No such order")
+        );
+
+        if (order.getLoaders().contains(loader)) {
+            return false;
+        }
+
+        boolean flag = false;
+        if (order.getOrderDetails().getLoadersCapacity() > order.getLoaders().size()) {
+            order.getLoaders().add(loader);
+            flag = true;
+        }
+
+        if (order.getOrderDetails().getLoadersCapacity() <= order.getLoaders().size() && order.getDriverId() != null) {
+            order.setStatus("WAIT_APPROVE");
+        }
+
+        orderReposiory.save(order);
+        return flag;
+    }
+
+    public List<OrderDto> showReleventOrdersOnDay(Date date, int driverOrLoader) {
+        List<OrderDto> orderDtoList = new ArrayList<>();
+
+        if (driverOrLoader == 1) {
+            for (Optional<Order> order : orderReposiory.findAllByDriverIdIsNullAndOrderDetailsDateTime(date)) {
+                orderDtoList.add(
+                        classToDtoService.convertOrderToOrderDto(order.get())
+                );
+            }
+        } else if (driverOrLoader == 2) {
+            //System.out.println(orderReposiory.countByLoaders());
+            for (Optional<Long> idOrder : orderReposiory.countByLoaders(date)) {
+                orderDtoList.add(
+                        classToDtoService.convertOrderToOrderDto(
+                                orderReposiory.findById(idOrder.get()).get()
+                        )
+                );
+            }
+        }
+
+        return orderDtoList;
+    }
+
+    public boolean rejectWorkerAcceptedOrder(User user, long orderId, int driverOrLoader) {
+        if (driverOrLoader == 1) {
+            Order order = orderReposiory.findById(orderId).orElseThrow(
+                    () -> new NotFoundException("Order not found")
+            );
+
+            if (order.getDriverId() == driversRepository.findByUser(user).orElseThrow(
+                    () -> new UserNotFoundExeption("No such driver")
+            )) {
+                order.setDriverId(null);
+                order.setStatus("CREATED");
+                orderReposiory.save(order);
+
+                return true;
+            }
+        } else if (driverOrLoader == 2) {
+            Order order = orderReposiory.findById(orderId).orElseThrow(
+                    () -> new NotFoundException("Order not found")
+            );
+
+            if (order.getLoaders().contains( loadersRepository.findByUser(user).orElseThrow(
+                    () -> new UserNotFoundExeption("No such driver")
+                ))
+            ) {
+                order.getLoaders().remove(loadersRepository.findByUser(user).get());
+                order.setStatus("CREATED");
+                orderReposiory.save(order);
+
+                return true;
+            }
+        }
+
+        return false;
     }
 }

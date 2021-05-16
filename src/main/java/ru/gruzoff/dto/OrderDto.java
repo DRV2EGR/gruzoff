@@ -15,6 +15,8 @@ import ru.gruzoff.entity.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderDto {
+    protected long id;
+
     protected UserDto customer;
     protected UserDto driver;
 

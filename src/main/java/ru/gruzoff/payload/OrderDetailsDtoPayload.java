@@ -16,6 +16,8 @@ public class OrderDetailsDtoPayload {
     protected Adress adressTo;
 
     protected Date dateTime;
+    protected float timeOnOrder;
+    protected int loadersCapacity;
 
     protected String comment;
 }

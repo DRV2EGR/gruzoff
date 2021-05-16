@@ -21,6 +21,8 @@ public class OrderDetails extends BaseEntity {
     protected Date dateTime;
     protected float timeOnOrder;
 
+    protected int loadersCapacity;
+
     @Column(columnDefinition = "TEXT")
     protected String comment;
 }
