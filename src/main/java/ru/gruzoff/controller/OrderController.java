@@ -97,4 +97,9 @@ public class OrderController {
                 dateFilterDtoPayload.getDate2()
         ));
     }
+
+    @GetMapping("/get_order_by_id")
+    public ResponseEntity<OrderDto> getOrderById(@RequestParam long orderId) {
+        return ResponseEntity.ok(orderService.getOrderById(orderId));
+    }
 }

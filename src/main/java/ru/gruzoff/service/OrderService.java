@@ -50,6 +50,14 @@ public class OrderService {
     @Autowired
     CarTypeRepository carTypeRepository;
 
+    public OrderDto getOrderById(long orderId) {
+        return classToDtoService.convertOrderToOrderDto(
+                orderReposiory.findById(orderId).orElseThrow(
+                        () -> new NotFoundException("Order not found")
+                )
+        );
+    }
+
     public OrderDto createNewOrder(CreateOrderDtoPayload createOrderDtoPayload) throws Exception {
         User user = userService.findById(createOrderDtoPayload.getCustomerId()).orElseThrow(
                 () -> new UserNotFoundExeption("Main customer not found!")
@@ -265,11 +273,16 @@ public class OrderService {
     }
 
     public boolean rejectWorkerAcceptedOrder(User user, long orderId, int driverOrLoader) {
-        if (driverOrLoader == 1) {
-            Order order = orderReposiory.findById(orderId).orElseThrow(
-                    () -> new NotFoundException("Order not found")
-            );
 
+        Order order = orderReposiory.findById(orderId).orElseThrow(
+                () -> new NotFoundException("Order not found")
+        );
+
+        if (order.getStatus().equals("IN_WORK")) {
+            return false;
+        }
+
+        if (driverOrLoader == 1) {
             if (order.getDriverId() == driversRepository.findByUser(user).orElseThrow(
                     () -> new UserNotFoundExeption("No such driver")
             )) {
@@ -280,10 +293,6 @@ public class OrderService {
                 return true;
             }
         } else if (driverOrLoader == 2) {
-            Order order = orderReposiory.findById(orderId).orElseThrow(
-                    () -> new NotFoundException("Order not found")
-            );
-
             if (order.getLoaders().contains( loadersRepository.findByUser(user).orElseThrow(
                     () -> new UserNotFoundExeption("No such driver")
                 ))
