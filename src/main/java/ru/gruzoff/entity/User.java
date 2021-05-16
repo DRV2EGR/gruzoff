@@ -73,6 +73,9 @@ public class User extends BaseEntity{
     @Column(name = "time_of_account_creation")
     protected LocalDateTime timeOfAccountCreation;
 
+    @Column(name = "creation_activation_code")
+    protected LocalDateTime createdActivationCode;
+
     /**
      * The User profile image url.
      */

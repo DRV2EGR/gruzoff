@@ -29,7 +29,7 @@ import ru.gruzoff.service.UserService;
 @Component
 @Slf4j
 public class JwtTokenProvider {
-    private Logger logger = LoggerFactory.getLogger(JwtTokenProvider.class);
+    private Logger logger = LoggerFactory.getLogger("securityLogger");
 
     private final JwtUserDetailsService jwtUserDetailsService;
 

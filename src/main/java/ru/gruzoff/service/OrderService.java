@@ -1,7 +1,11 @@
 package ru.gruzoff.service;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.gruzoff.dto.CarDto;
@@ -16,6 +20,7 @@ import ru.gruzoff.payload.UserDtoPayload;
 import ru.gruzoff.repository.*;
 
 @Service
+@Slf4j
 public class OrderService {
     @Autowired
     UserService userService;
@@ -58,6 +63,11 @@ public class OrderService {
 
     @Autowired
     CarValidityRepository carValidityRepository;
+
+    @Autowired
+    MailService mailService;
+
+    Logger logger = LoggerFactory.getLogger("orderLogger");
 
     public OrderDto getOrderById(long orderId) {
         return classToDtoService.convertOrderToOrderDto(
@@ -148,6 +158,9 @@ public class OrderService {
         );
 
         orderReposiory.save(order);
+
+        logger.info("Order " + order.getId() + " created at " + LocalDateTime.now() + " by user " + user.getId());
+        mailService.send(user.getEmail(), "Создание нового заказа.", mailService.creationOrderNotify(user, order));
 
         user.getOrders().add(order);
         userRepository.save(user);

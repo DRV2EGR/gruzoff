@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN" monitorInterval="30">
+
+    <Properties>
+        <Property name="LOG_PATTERN">%d{yyyy-MM-dd'T'HH:mm:ss.SSSZ} %p %m%n</Property>
+        <Property name="APP_LOG_ROOT">/log</Property>
+    </Properties>
+
+    <Appenders>
+
+        <Console name="console" target="SYSTEM_OUT" follow="true">
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+        </Console>
+
+        <RollingFile name="springLog" fileName="${sys:APP_LOG_ROOT}/spring-framework.log"
+                     filePattern="${sys:APP_LOG_ROOT}/spring-%d{yyyy-MM-dd}-%i.log">
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="19500KB" />
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+
+        <RollingFile name="hibernateLog" fileName="${sys:APP_LOG_ROOT}/database.log"
+                     filePattern="${sys:APP_LOG_ROOT}/spring-%d{yyyy-MM-dd}-%i.log">
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="19500KB" />
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+
+        <RollingFile name="emailLog" fileName="${sys:APP_LOG_ROOT}/email.log"
+                     filePattern="${sys:APP_LOG_ROOT}/spring-%d{yyyy-MM-dd}-%i.log">
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="19500KB" />
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+
+        <RollingFile name="schedulerLog" fileName="${sys:APP_LOG_ROOT}/scheduler.log"
+                     filePattern="${sys:APP_LOG_ROOT}/spring-%d{yyyy-MM-dd}-%i.log">
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="19500KB" />
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+
+        <RollingFile name="securityLog" fileName="${sys:APP_LOG_ROOT}/security.log"
+                     filePattern="${sys:APP_LOG_ROOT}/spring-%d{yyyy-MM-dd}-%i.log">
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="19500KB" />
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+
+        <RollingFile name="orderLog" fileName="${sys:APP_LOG_ROOT}/orders.log"
+                     filePattern="${sys:APP_LOG_ROOT}/spring-%d{yyyy-MM-dd}-%i.log">
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+            <Policies>
+            </Policies>
+        </RollingFile>
+
+    </Appenders>
+
+    <Loggers>
+<!--        <Logger name="org.springframework" additivity="true" level="error">-->
+<!--            <AppenderRef ref="springLog" />-->
+<!--        </Logger>-->
+
+        <Logger name="org.springframework" additivity="true" level="info">
+            <AppenderRef ref="springLog" />
+        </Logger>
+
+        <Logger name="org.hibernate" additivity="true" level="error">
+            <AppenderRef ref="hibernateLog" />
+        </Logger>
+
+        <Logger name="emailLogger" additivity="true" level="info">
+            <AppenderRef ref="emailLog" />
+        </Logger>
+
+        <Logger name="schedulerLogger" additivity="true" level="info">
+            <AppenderRef ref="schedulerLog" />
+        </Logger>
+
+        <Logger name="securityLogger" additivity="true" level="info">
+            <AppenderRef ref="securityLog" />
+        </Logger>
+
+        <Logger name="orderLogger" additivity="true" level="info">
+            <AppenderRef ref="orderLog" />
+        </Logger>
+
+        <Root level="INFO">
+            <AppenderRef ref="console"/>
+        </Root>
+
+    </Loggers>
+
+</Configuration>
