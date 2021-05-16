@@ -57,6 +57,13 @@
             <DefaultRolloverStrategy max="10"/>
         </RollingFile>
 
+        <RollingFile name="orderLog" fileName="${sys:APP_LOG_ROOT}/orders.log"
+                     filePattern="${sys:APP_LOG_ROOT}/spring-%d{yyyy-MM-dd}-%i.log">
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+            <Policies>
+            </Policies>
+        </RollingFile>
+
     </Appenders>
 
     <Loggers>
@@ -82,6 +89,10 @@
 
         <Logger name="securityLogger" additivity="true" level="info">
             <AppenderRef ref="securityLog" />
+        </Logger>
+
+        <Logger name="orderLogger" additivity="true" level="info">
+            <AppenderRef ref="orderLog" />
         </Logger>
 
         <Root level="INFO">
