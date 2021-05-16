@@ -23,6 +23,9 @@ public class OrderDetails extends BaseEntity {
 
     protected int loadersCapacity;
 
+    @ManyToOne
+    protected CarType carType;
+
     @Column(columnDefinition = "TEXT")
     protected String comment;
 }

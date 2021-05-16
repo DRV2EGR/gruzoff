@@ -4,8 +4,11 @@ import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.gruzoff.dto.CarDto;
+import ru.gruzoff.dto.CarWithCarValidDto;
 import ru.gruzoff.dto.OrderDto;
 import ru.gruzoff.entity.*;
+import ru.gruzoff.exception.ConflictException;
 import ru.gruzoff.exception.NotFoundException;
 import ru.gruzoff.exception.UserNotFoundExeption;
 import ru.gruzoff.payload.CreateOrderDtoPayload;
@@ -49,6 +52,12 @@ public class OrderService {
 
     @Autowired
     CarTypeRepository carTypeRepository;
+
+    @Autowired
+    CarRepository carRepository;
+
+    @Autowired
+    CarValidityRepository carValidityRepository;
 
     public OrderDto getOrderById(long orderId) {
         return classToDtoService.convertOrderToOrderDto(
@@ -117,6 +126,7 @@ public class OrderService {
                 createOrderDtoPayload.getOrderDetails().getDateTime(),
                 time,
                 createOrderDtoPayload.getNumOfLoaders(),
+                carType,
                 createOrderDtoPayload.getOrderDetails().getComment()
         );
 
@@ -199,7 +209,7 @@ public class OrderService {
         return ordersRes;
     }
 
-    public boolean takeOrderToDriver(User user, long orderId) {
+    public boolean takeOrderToDriver(User user, long carId, long orderId) {
         Drivers driver = driversRepository.findByUser(user).orElseThrow(
                 () -> new UserNotFoundExeption("No such driver")
         );
@@ -212,7 +222,23 @@ public class OrderService {
             return false;
         }
 
+        Car car = carRepository.findByIdAndType(carId, order.getOrderDetails().getCarType()).orElseThrow(
+                () -> new NotFoundException("No such car")
+        );
+
+        if (!driver.getCars().contains(car)) { throw new ConflictException("Not car of this driver"); }
+
+        boolean f = false;
+        for (Optional<Order> ord : orderReposiory.findAllByCarId(car)) {
+            if (ord.get().getOrderDetails().getDateTime().compareTo(order.getOrderDetails().getDateTime()) == 0) {
+                f = true;
+                throw new ConflictException("At this day car is not valid");
+            }
+        }
+        if (f) { return false; }
+
         order.setDriverId(driver);
+        order.setCarId(car);
 
 
         if (order.getOrderDetails().getLoadersCapacity() <= order.getLoaders().size() && order.getDriverId() != null) {
@@ -307,5 +333,23 @@ public class OrderService {
         }
 
         return false;
+    }
+
+    public List<CarWithCarValidDto> getAllDriverCars(User user) {
+        List<Car> carList = driversRepository.findByUser(user).orElseThrow(
+                () -> new NotFoundException("No such driver")
+        ).getCars();
+
+        List<CarWithCarValidDto> carDtoList = new ArrayList<>();
+        for (Car car : carList) {
+            carDtoList.add(
+                    classToDtoService.convertCarToCarWithCarValidDto(
+                            car,
+                            carValidityRepository.findByCarId(car).get()
+                    )
+            );
+        }
+
+        return carDtoList;
     }
 }

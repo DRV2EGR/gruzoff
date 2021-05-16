@@ -9,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import ru.gruzoff.dto.BasicResponce;
+import ru.gruzoff.dto.CarWithCarValidDto;
 import ru.gruzoff.dto.OrderDto;
 import ru.gruzoff.dto.ResponseStatusOperationDto;
 import ru.gruzoff.entity.User;
@@ -51,9 +52,14 @@ public class WorkerController {
         ));
     }
 
+    @GetMapping("/driver/get_driver_cars")
+    public ResponseEntity<List<CarWithCarValidDto>> getDriverCars() {
+        return ResponseEntity.ok(orderService.getAllDriverCars(getAuthentificatedUser()));
+    }
+
     @GetMapping("/driver/take_order_as_driver")
-    public ResponseEntity<BasicResponce> takeOrderAsDriver(@RequestParam long orderId) {
-        if ((orderService.takeOrderToDriver(getAuthentificatedUser(), orderId))) {
+    public ResponseEntity<BasicResponce> takeOrderAsDriver(@RequestParam long orderId, @RequestParam long carId) {
+        if ((orderService.takeOrderToDriver(getAuthentificatedUser(), carId, orderId))) {
             return ResponseEntity.ok(new ResponseStatusOperationDto("OK"));
         }
 

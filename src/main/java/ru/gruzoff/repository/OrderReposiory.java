@@ -23,6 +23,8 @@ public interface OrderReposiory extends JpaRepository<Order, Long> {
 
     List<Optional<Order>> findAllByStatus(String status);
 
+    List<Optional<Order>> findAllByCarId(Car car);
+
     /*
         select o.id from orders o
         left join order_details od ON o.order_details_id = od.id
