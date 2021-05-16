@@ -8,6 +8,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -25,7 +27,6 @@ import ru.gruzoff.repository.*;
  * The type User service.
  */
 @Service
-@Slf4j
 public class UserService {
     @Autowired
     private UserRepository userRepository;
@@ -56,6 +57,8 @@ public class UserService {
 
     @Autowired
     MailService mailService;
+
+    Logger log = LoggerFactory.getLogger("securityLogger");
 
     /**
      * Password encoder b crypt password encoder.
@@ -115,6 +118,8 @@ public class UserService {
         );
 
         activatedUser.setTimeOfAccountCreation(LocalDateTime.now());
+
+        log.info("Activated profile of userID: " + activatedUser.getId() + " by activation ccode " + encodedUserActivationCode);
 
         activatedUser.setActivationCode(null);
         userRepository.save(activatedUser);

@@ -1,7 +1,12 @@
 package ru.gruzoff.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -9,12 +14,15 @@ import ru.gruzoff.entity.Order;
 import ru.gruzoff.entity.User;
 
 @Service
+@Slf4j
 public class MailService {
     @Autowired
     private JavaMailSender mailSender;
 
     @Value("${spring.mail.username}")
     private String username;
+
+    Logger logger = LoggerFactory.getLogger("emailLogger");
 
     public void send(String emailTo, String subject, String message) {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
@@ -24,6 +32,7 @@ public class MailService {
         mailMessage.setSubject(subject);
         mailMessage.setText(message);
 
+        logger.info("Sended message to " + emailTo + " sbj: " + subject);
         mailSender.send(mailMessage);
     }
 
