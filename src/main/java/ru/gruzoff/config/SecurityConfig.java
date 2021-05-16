@@ -1,4 +1,4 @@
-package ru.gruzoff.security.config;
+package ru.gruzoff.config;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
