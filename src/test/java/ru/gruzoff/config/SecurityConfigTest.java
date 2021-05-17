@@ -18,34 +18,26 @@ public class SecurityConfigTest {
     @Autowired
     private AuthenticationManagerBuilder authenticationManagerBuilder;
 
-    @Autowired
-    private ObjectPostProcessor<Object> objectPostProcessor;
+//    @Autowired
+//    private ObjectPostProcessor<Object> objectPostProcessor;
 
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
 
-    @Test
-    public void testAuthenticationManagerBean() throws Exception {
-        // TODO: This test is incomplete.
-        //   Reason: No meaningful assertions found.
-        //   To help Diffblue Cover to find assertions, please add getters to the
-        //   class under test that return fields written by the method under test.
-        //   See https://diff.blue/R004
+//    @Test
+//    public void testAuthenticationManagerBean() throws Exception {
+//        // TODO:
+//
+//        (new SecurityConfig(this.jwtTokenProvider)).authenticationManagerBean();
+//    }
 
-        (new SecurityConfig(this.jwtTokenProvider)).authenticationManagerBean();
-    }
-
-    @Test
-    public void testConfigure() throws Exception {
-        // TODO: This test is incomplete.
-        //   Reason: No meaningful assertions found.
-        //   To help Diffblue Cover to find assertions, please add getters to the
-        //   class under test that return fields written by the method under test.
-        //   See https://diff.blue/R004
-
-        SecurityConfig securityConfig = new SecurityConfig(this.jwtTokenProvider);
-        securityConfig.configure(new HttpSecurity(this.objectPostProcessor, this.authenticationManagerBuilder,
-                new HashMap<Class<?>, Object>(1)));
-    }
+//    @Test
+//    public void testConfigure() throws Exception {
+//        // TODO:
+//
+//        SecurityConfig securityConfig = new SecurityConfig(this.jwtTokenProvider);
+//        securityConfig.configure(new HttpSecurity(this.objectPostProcessor, this.authenticationManagerBuilder,
+//                new HashMap<Class<?>, Object>(1)));
+//    }
 }
 

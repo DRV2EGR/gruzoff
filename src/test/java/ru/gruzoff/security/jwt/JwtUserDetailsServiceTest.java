@@ -67,36 +67,36 @@ public class JwtUserDetailsServiceTest {
         verify(this.userService).findByUsername(anyString());
     }
 
-    @Test
-    public void testLoadUserByUsername2() throws UsernameNotFoundException {
-        Role role = new Role();
-        role.setId(123L);
-        role.setName("");
-
-        User user = new User();
-        user.setLastName("Doe");
-        user.setEmail("jane.doe@example.org");
-        user.setPassword("iloveyou");
-        user.setRecievedLikes(new ArrayList<Likes>());
-        user.setActivationCode("Activation Code");
-        user.setPuttedComments(new ArrayList<Comments>());
-        user.setCreatedActivationCode(LocalDateTime.of(1, 1, 1, 1, 1));
-        user.setId(123L);
-        user.setOrders(new ArrayList<Order>());
-        user.setRole(role);
-        user.setPhoneNumber("4105551212");
-        user.setTimeOfAccountCreation(LocalDateTime.of(1, 1, 1, 1, 1));
-        user.setUserProfileImageUrl("https://example.org/example");
-        user.setFirstName("Jane");
-        user.setUsername("janedoe");
-        user.setRecievedComments(new ArrayList<Comments>());
-        user.setSecondName("Second Name");
-        user.setPuttedLikes(new ArrayList<Likes>());
-        Optional<User> ofResult = Optional.<User>of(user);
-        when(this.userService.findByUsername(anyString())).thenReturn(ofResult);
-        this.jwtUserDetailsService.loadUserByUsername("janedoe");
-        verify(this.userService).findByUsername(anyString());
-    }
+//    @Test
+//    public void testLoadUserByUsername2() throws UsernameNotFoundException {
+//        Role role = new Role();
+//        role.setId(123L);
+//        role.setName("");
+//
+//        User user = new User();
+//        user.setLastName("Doe");
+//        user.setEmail("jane.doe@example.org");
+//        user.setPassword("iloveyou");
+//        user.setRecievedLikes(new ArrayList<Likes>());
+//        user.setActivationCode("Activation Code");
+//        user.setPuttedComments(new ArrayList<Comments>());
+//        user.setCreatedActivationCode(LocalDateTime.of(1, 1, 1, 1, 1));
+//        user.setId(123L);
+//        user.setOrders(new ArrayList<Order>());
+//        user.setRole(role);
+//        user.setPhoneNumber("4105551212");
+//        user.setTimeOfAccountCreation(LocalDateTime.of(1, 1, 1, 1, 1));
+//        user.setUserProfileImageUrl("https://example.org/example");
+//        user.setFirstName("Jane");
+//        user.setUsername("janedoe");
+//        user.setRecievedComments(new ArrayList<Comments>());
+//        user.setSecondName("Second Name");
+//        user.setPuttedLikes(new ArrayList<Likes>());
+//        Optional<User> ofResult = Optional.<User>of(user);
+//        when(this.userService.findByUsername(anyString())).thenReturn(ofResult);
+//        this.jwtUserDetailsService.loadUserByUsername("janedoe");
+//        verify(this.userService).findByUsername(anyString());
+//    }
 
     @Test
     public void testLoadUserByUsername3() throws UsernameNotFoundException {

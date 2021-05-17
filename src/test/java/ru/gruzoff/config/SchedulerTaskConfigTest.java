@@ -33,26 +33,18 @@ public class SchedulerTaskConfigTest {
     @MockBean
     private UserService userService;
 
-    @Test
-    public void testClearExpiredRefreshTokens() {
-        // TODO: This test is incomplete.
-        //   Reason: No meaningful assertions found.
-        //   To help Diffblue Cover to find assertions, please add getters to the
-        //   class under test that return fields written by the method under test.
-        //   See https://diff.blue/R004
-
-        this.schedulerTaskConfig.clearExpiredRefreshTokens();
-    }
-
-    @Test
-    public void testClearExpiredCodes() {
-        // TODO: This test is incomplete.
-        //   Reason: No meaningful assertions found.
-        //   To help Diffblue Cover to find assertions, please add getters to the
-        //   class under test that return fields written by the method under test.
-        //   See https://diff.blue/R004
-
-        this.schedulerTaskConfig.clearExpiredCodes();
-    }
+//    @Test
+//    public void testClearExpiredRefreshTokens() {
+//        // TODO:
+//
+//        this.schedulerTaskConfig.clearExpiredRefreshTokens();
+//    }
+//
+//    @Test
+//    public void testClearExpiredCodes() {
+//        // TODO:
+//
+//        this.schedulerTaskConfig.clearExpiredCodes();
+//    }
 }
 
