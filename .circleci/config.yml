@@ -26,24 +26,11 @@ workflows:
 jobs:
   build:
 
-    #    working_directory: ~/Flats_io
-
     docker:
       - image: circleci/openjdk:latest
       - image: circleci/postgres:latest
-    #        environment:
-    #          POSTGRES_USER: hackaton_app
-    #          POSTGRES_DB: hackaton_demo
-    #          POSTGRES_PASSWORD: 1234
 
     steps:
-      #      - run:
-      #          name: Setup PSQL Databases
-      #          command: |
-      #            sudo rm -rf /var/lib/apt/lists/* && sudo apt update
-      #            sudo apt-get update
-      #            sudo apt install -y postgresql-client
-      #            createdb -h localhost hackaton_test -U hackaton_app
       - checkout
 
       - run: mvn package
@@ -52,7 +39,7 @@ jobs:
           path: target/surefire-reports
 
       - store_artifacts:
-          path: target/Flats_io.jar
+          path: target/Gruzoff-0.0.1-SNAPSHOT.jar
 
       - run: bash <(curl -s https://codecov.io/bash)
 
