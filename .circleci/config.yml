@@ -54,7 +54,7 @@ jobs:
       - store_artifacts:
           path: target/Flats_io.jar
 
-      #- run: bash <(curl -s https://codecov.io/bash)
+      - run: bash <(curl -s https://codecov.io/bash)
 
 #  deploy:
 #    docker:
