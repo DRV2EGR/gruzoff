@@ -69,6 +69,12 @@ public class AuthenticationController {
         return ResponseEntity.ok(jwtAuthDto);
     }
 
+    /**
+     * Activate user response entity.
+     *
+     * @param activationCode the activation code
+     * @return the response entity
+     */
     @GetMapping("/activate/{activationCode}")
     public ResponseEntity activateUser(@PathVariable String activationCode) {
         userService.activateUser(activationCode);

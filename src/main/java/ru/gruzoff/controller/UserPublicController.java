@@ -16,15 +16,30 @@ import ru.gruzoff.entity.Likes;
 import ru.gruzoff.service.ClassToDtoService;
 import ru.gruzoff.service.UserService;
 
+/**
+ * The type User public controller.
+ */
 @RestController
 @RequestMapping(value = "/v1/api/user/public", produces = MediaType.APPLICATION_JSON_VALUE)
 public class UserPublicController {
+    /**
+     * The User service.
+     */
     @Autowired
     UserService userService;
 
+    /**
+     * The Class to dto service.
+     */
     @Autowired
     ClassToDtoService classToDtoService;
 
+    /**
+     * Gets public user info by id.
+     *
+     * @param id the id
+     * @return the public user info by id
+     */
     @GetMapping("/user_by_id")
     public ResponseEntity<UserPublicDto> getPublicUserInfoById(@RequestParam long id) {
         return ResponseEntity.ok(
@@ -34,6 +49,12 @@ public class UserPublicController {
         );
     }
 
+    /**
+     * Gets public user info by username.
+     *
+     * @param username the username
+     * @return the public user info by username
+     */
     @GetMapping("/user_by_username")
     public ResponseEntity<UserPublicDto> getPublicUserInfoByUsername(@RequestParam String username) {
         return ResponseEntity.ok(
@@ -43,6 +64,12 @@ public class UserPublicController {
         );
     }
 
+    /**
+     * Gets user recieved likes.
+     *
+     * @param id the id
+     * @return the user recieved likes
+     */
     @GetMapping("/get_recieved_likes_by_id")
     public ResponseEntity<List<LikeDto>> getUserRecievedLikes(@RequestParam long id) {
         List<LikeDto> lstLikes = new ArrayList<>();

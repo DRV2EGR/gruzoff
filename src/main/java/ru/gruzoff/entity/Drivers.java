@@ -9,6 +9,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * The type Drivers.
+ */
 @Entity
 @Table(name ="drivers")
 @Data
@@ -19,6 +22,9 @@ public class Drivers extends BaseEntity implements Serializable {
     @JoinColumn(name = "user_id")
     private User user;
 
+    /**
+     * The Cars.
+     */
     @ManyToMany
     @JoinColumn(name = "cars", referencedColumnName = "id")
     protected List<Car> cars;

@@ -55,9 +55,15 @@ public class UserService {
     @Autowired
     public BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    /**
+     * The Mail service.
+     */
     @Autowired
     MailService mailService;
 
+    /**
+     * The Log.
+     */
     Logger log = LoggerFactory.getLogger("securityLogger");
 
     /**
@@ -85,12 +91,24 @@ public class UserService {
         return userRepository.findByUsername(username);
     }
 
+    /**
+     * Find user by username user.
+     *
+     * @param username the username
+     * @return the user
+     */
     public User findUserByUsername(String username) {
         return userRepository.findByUsername(username).orElseThrow(
                 () -> new UserNotFoundExeption("User with this username not found!")
         );
     }
 
+    /**
+     * Find user by id user.
+     *
+     * @param userId the user id
+     * @return the user
+     */
     public User findUserById(long userId) {
         return userRepository.findById(userId).orElseThrow(
                 () -> new UserNotFoundExeption("User with this id not found!")
@@ -111,6 +129,11 @@ public class UserService {
         return userRepository.findById(userId);
     }
 
+    /**
+     * Activate user.
+     *
+     * @param encodedUserActivationCode the encoded user activation code
+     */
     public void activateUser(String encodedUserActivationCode) {
 
         User activatedUser = userRepository.findByActivationCode(encodedUserActivationCode).orElseThrow(
@@ -125,6 +148,12 @@ public class UserService {
         userRepository.save(activatedUser);
     }
 
+    /**
+     * Create new user and fill basic fields user.
+     *
+     * @param basicPayload the basic payload
+     * @return the user
+     */
     public User createNewUserAndFillBasicFields(BasicPayload basicPayload) {
         User user = new User();
 
@@ -153,6 +182,12 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
+    /**
+     * Register new customer user dto.
+     *
+     * @param userDtoPayload the user dto payload
+     * @return the user dto
+     */
     public UserDto registerNewCustomer(UserDtoPayload userDtoPayload) {
         User user = createNewUserAndFillBasicFields(userDtoPayload);
         Customers customers = new Customers();
@@ -174,6 +209,12 @@ public class UserService {
         return convertUserToUserDto(user);
     }
 
+    /**
+     * Register new driver user dto.
+     *
+     * @param userDtoPayload the user dto payload
+     * @return the user dto
+     */
     public UserDto registerNewDriver(UserDtoPayload userDtoPayload) {
         User user = createNewUserAndFillBasicFields(userDtoPayload);
         Drivers driver = new Drivers();
@@ -195,6 +236,12 @@ public class UserService {
         return convertUserToUserDto(user);
     }
 
+    /**
+     * Register new loader user dto.
+     *
+     * @param userDtoPayload the user dto payload
+     * @return the user dto
+     */
     public UserDto registerNewLoader(UserDtoPayload userDtoPayload) {
         User user = createNewUserAndFillBasicFields(userDtoPayload);
         Loaders loader = new Loaders();
@@ -217,6 +264,12 @@ public class UserService {
     }
 
 
+    /**
+     * Convert user to user dto user dto.
+     *
+     * @param user the user
+     * @return the user dto
+     */
     public UserDto convertUserToUserDto(User user) {
         UserDto userDto = new UserDto();
         userDto.setId(user.getId());
@@ -231,6 +284,13 @@ public class UserService {
         return userDto;
     }
 
+    /**
+     * Gets users order by order id.
+     *
+     * @param user    the user
+     * @param orderid the orderid
+     * @return the users order by order id
+     */
     public Order getUsersOrderByOrderId(User user, long orderid) {
         Order order = orderReposiory.findByIdAndCustomerId(
                 orderid,
@@ -244,6 +304,12 @@ public class UserService {
         return order;
     }
 
+    /**
+     * Sets like.
+     *
+     * @param usr_from the usr from
+     * @param id_to    the id to
+     */
     public void setLike(User usr_from, long id_to) {
         User usr_to = userRepository.findById(id_to).orElseThrow(
                 () -> new UserNotFoundExeption("")
@@ -262,6 +328,15 @@ public class UserService {
         userRepository.save(usr_to);
     }
 
+    /**
+     * Change info user dto.
+     *
+     * @param user           the user
+     * @param userDtoPayload the user dto payload
+     * @return the user dto
+     * @throws NoSuchFieldException   the no such field exception
+     * @throws IllegalAccessException the illegal access exception
+     */
     public UserDto changeInfo(User user, UserDtoPayload userDtoPayload) throws NoSuchFieldException, IllegalAccessException {
         System.out.println(userDtoPayload.getClass().getDeclaredFields().length);
         for (Field obj : userDtoPayload.getClass().getDeclaredFields()) {
@@ -288,6 +363,12 @@ public class UserService {
         return convertUserToUserDto(user);
     }
 
+    /**
+     * Delete user boolean.
+     *
+     * @param user the user
+     * @return the boolean
+     */
     public boolean deleteUser(User user) {
         if (customerRepository.findByUser(user).isPresent()) {
             customerRepository.delete(customerRepository.findByUser(user).get());

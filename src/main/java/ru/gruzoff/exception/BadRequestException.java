@@ -10,6 +10,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class BadRequestException extends ApiClientException {
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Instantiates a new Bad request exception.
+     *
+     * @param message the message
+     */
     public BadRequestException(String message) {
         super(message);
     }

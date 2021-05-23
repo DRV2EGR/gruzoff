@@ -73,6 +73,9 @@ public class User extends BaseEntity{
     @Column(name = "time_of_account_creation")
     protected LocalDateTime timeOfAccountCreation;
 
+    /**
+     * The Created activation code.
+     */
     @Column(name = "creation_activation_code")
     protected LocalDateTime createdActivationCode;
 
@@ -89,22 +92,37 @@ public class User extends BaseEntity{
     @JoinColumn(name = "role_id", referencedColumnName = "id")
     protected Role role;
 
+    /**
+     * The Orders.
+     */
     @ManyToMany
     @JoinColumn(name = "orders", referencedColumnName = "id")
     protected List<Order> orders;
 
+    /**
+     * The Putted likes.
+     */
     @OneToMany
     @JoinColumn(name = "user_id_to", referencedColumnName = "id")
     protected List<Likes> puttedLikes;
 
+    /**
+     * The Recieved likes.
+     */
     @OneToMany
     @JoinColumn(name = "user_id_from", referencedColumnName = "id")
     protected List<Likes> recievedLikes;
 
+    /**
+     * The Putted comments.
+     */
     @OneToMany
     @JoinColumn(name = "user_id_to", referencedColumnName = "id")
     protected List<Comments> puttedComments;
 
+    /**
+     * The Recieved comments.
+     */
     @OneToMany
     @JoinColumn(name = "user_id_from", referencedColumnName = "id")
     protected List<Comments> recievedComments;
@@ -121,6 +139,15 @@ public class User extends BaseEntity{
         this.setUsername(username);
     }
 
+    /**
+     * Instantiates a new User.
+     *
+     * @param firstName   the first name
+     * @param secondName  the second name
+     * @param lastName    the last name
+     * @param email       the email
+     * @param phoneNumber the phone number
+     */
     public User(String firstName, String secondName, String lastName, String email, String phoneNumber) {
         this.firstName = firstName;
         this.secondName = secondName;

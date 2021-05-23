@@ -15,20 +15,40 @@ import ru.gruzoff.entity.Order;
 import ru.gruzoff.exception.NotFoundException;
 import ru.gruzoff.repository.OrderReposiory;
 
+/**
+ * The type Manager service.
+ */
 @Service
 @Slf4j
 public class ManagerService {
+    /**
+     * The Order reposiory.
+     */
     @Autowired
     OrderReposiory orderReposiory;
 
+    /**
+     * The Class to dto service.
+     */
     @Autowired
     ClassToDtoService classToDtoService;
 
+    /**
+     * The Mail service.
+     */
     @Autowired
     MailService mailService;
 
+    /**
+     * The Logger.
+     */
     Logger logger = LoggerFactory.getLogger("orderLogger");
 
+    /**
+     * Gets orders to accept.
+     *
+     * @return the orders to accept
+     */
     public List<OrderDto> getOrdersToAccept() {
         List<OrderDto> orderDtoList = new ArrayList<>();
 
@@ -41,6 +61,12 @@ public class ManagerService {
         return orderDtoList;
     }
 
+    /**
+     * Accept by id.
+     *
+     * @param orderId the order id
+     * @param st      the st
+     */
     public void acceptById(long orderId, int st) {
         if (st == 1) { //Accept
             Order order = orderReposiory.findById(orderId).orElseThrow(

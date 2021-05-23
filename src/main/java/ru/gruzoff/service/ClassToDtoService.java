@@ -8,9 +8,15 @@ import org.springframework.stereotype.Service;
 import ru.gruzoff.dto.*;
 import ru.gruzoff.entity.*;
 
+/**
+ * The type Class to dto service.
+ */
 @Service
 public class ClassToDtoService
 {
+    /**
+     * The User service.
+     */
     @Autowired
     UserService userService;
 
@@ -39,6 +45,12 @@ public class ClassToDtoService
 //        return orderDto;
 //    }
 
+    /**
+     * Convert adress to adress dto adress dto.
+     *
+     * @param adress the adress
+     * @return the adress dto
+     */
     public AdressDto convertAdressToAdressDto(Adress adress) {
         return new AdressDto(
                 adress.getCountry(),
@@ -49,6 +61,12 @@ public class ClassToDtoService
         );
     }
 
+    /**
+     * Convert order details to order details dto order details dto.
+     *
+     * @param orderDetails the order details
+     * @return the order details dto
+     */
     public OrderDetailsDto convertOrderDetailsToOrderDetailsDto(OrderDetails orderDetails) {
         OrderDetailsDto orderDetailsDto = new OrderDetailsDto();
 
@@ -63,6 +81,12 @@ public class ClassToDtoService
         return orderDetailsDto;
     }
 
+    /**
+     * Convert car to car dto car dto.
+     *
+     * @param car the car
+     * @return the car dto
+     */
     public CarDto convertCarToCarDto(Car car) {
         if (car == null) { return null; }
         return new CarDto(
@@ -77,6 +101,12 @@ public class ClassToDtoService
         );
     }
 
+    /**
+     * Convert user to user public dto user public dto.
+     *
+     * @param user the user
+     * @return the user public dto
+     */
     public UserPublicDto convertUserToUserPublicDto(User user) {
         return new UserPublicDto(
                 user.getId(),
@@ -89,6 +119,12 @@ public class ClassToDtoService
         );
     }
 
+    /**
+     * Convert order to order dto order dto.
+     *
+     * @param order the order
+     * @return the order dto
+     */
     public OrderDto convertOrderToOrderDto(Order order) {
 
         List<UserDto> loaderslstDto = new ArrayList<>();
@@ -116,6 +152,12 @@ public class ClassToDtoService
         );
     }
 
+    /**
+     * Convert car type to car type dto car type dto.
+     *
+     * @param carType the car type
+     * @return the car type dto
+     */
     public CarTypeDto convertCarTypeToCarTypeDto(CarType carType) {
         return new CarTypeDto(
                 carType.getId(),
@@ -124,6 +166,12 @@ public class ClassToDtoService
         );
     }
 
+    /**
+     * Convert car validity to car validity dto car validity dto.
+     *
+     * @param carValidity the car validity
+     * @return the car validity dto
+     */
     public CarValidityDto convertCarValidityToCarValidityDto(CarValidity carValidity) {
         return new CarValidityDto(
                 carValidity.isValid(),
@@ -131,6 +179,13 @@ public class ClassToDtoService
         );
     }
 
+    /**
+     * Convert car to car with car valid dto car with car valid dto.
+     *
+     * @param car         the car
+     * @param carValidity the car validity
+     * @return the car with car valid dto
+     */
     public CarWithCarValidDto convertCarToCarWithCarValidDto(Car car, CarValidity carValidity) {
         return new CarWithCarValidDto(
                 car.getMax_weight(),

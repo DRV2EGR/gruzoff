@@ -20,13 +20,22 @@ import ru.gruzoff.security.jwt.JwtTokenProvider;
 import ru.gruzoff.service.MailService;
 import ru.gruzoff.service.UserService;
 
+/**
+ * The type Scheduler task config.
+ */
 @Configuration
 @EnableScheduling
 @Slf4j
 public class SchedulerTaskConfig {
+    /**
+     * The Refresh token repository.
+     */
     @Autowired
     RefreshTokenRepository refreshTokenRepository;
 
+    /**
+     * The Jwt token provider.
+     */
     @Autowired
     JwtTokenProvider jwtTokenProvider;
 
@@ -39,8 +48,14 @@ public class SchedulerTaskConfig {
     @Autowired
     private MailService mailService;
 
+    /**
+     * The Logger.
+     */
     Logger logger = LoggerFactory.getLogger("schedulerLog");
 
+    /**
+     * Clear expired refresh tokens.
+     */
     @Scheduled(cron = "${job.cron.rate}")
     public void clearExpiredRefreshTokens() {
         List<RefreshToken> rt = refreshTokenRepository.findAll(); //TODO: use sql
@@ -57,6 +72,9 @@ public class SchedulerTaskConfig {
         }
     }
 
+    /**
+     * Clear expired codes.
+     */
     @Scheduled(cron = "0 */10 * * * *")
     public void clearExpiredCodes() {
         logger.info("Activation canceling started!");

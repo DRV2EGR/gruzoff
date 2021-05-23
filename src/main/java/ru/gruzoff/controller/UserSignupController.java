@@ -24,18 +24,36 @@ public class UserSignupController {
     @Autowired
     UserService userService;
 
+    /**
+     * Sign up new customer response entity.
+     *
+     * @param userDtoPayload the user dto payload
+     * @return the response entity
+     */
     @PostMapping("/customer")
     public ResponseEntity<UserDto> signUpNewCustomer(@RequestBody UserDtoPayload userDtoPayload) {
         UserDto resp = userService.registerNewCustomer(userDtoPayload);
         return ResponseEntity.ok(resp);
     }
 
+    /**
+     * Sign up new driver response entity.
+     *
+     * @param userDtoPayload the user dto payload
+     * @return the response entity
+     */
     @PostMapping("/driver")
     public ResponseEntity<UserDto> signUpNewDriver(@RequestBody UserDtoPayload userDtoPayload) {
         UserDto resp = userService.registerNewDriver(userDtoPayload);
         return ResponseEntity.ok(resp);
     }
 
+    /**
+     * Sign up new loader response entity.
+     *
+     * @param userDtoPayload the user dto payload
+     * @return the response entity
+     */
     @PostMapping("/loader")
     public ResponseEntity<UserDto> signUpNewLoader(@RequestBody UserDtoPayload userDtoPayload) {
         UserDto resp = userService.registerNewLoader(userDtoPayload);

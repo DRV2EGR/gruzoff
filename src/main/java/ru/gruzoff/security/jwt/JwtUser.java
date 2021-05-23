@@ -33,6 +33,13 @@ public class JwtUser implements UserDetails {
         authorities.add(grantedAuthority);
     }
 
+    /**
+     * Instantiates a new Jwt user.
+     *
+     * @param username    the username
+     * @param password    the password
+     * @param authorities the authorities
+     */
     public JwtUser(String username, String password, Collection<GrantedAuthority> authorities) {
         this.username = username;
         this.password = password;

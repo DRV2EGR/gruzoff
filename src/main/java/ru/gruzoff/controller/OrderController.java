@@ -23,15 +23,27 @@ import ru.gruzoff.service.ClassToDtoService;
 import ru.gruzoff.service.OrderService;
 import ru.gruzoff.service.UserService;
 
+/**
+ * The type Order controller.
+ */
 @RestController
 @RequestMapping(value = "/v1/api/orders", produces = MediaType.APPLICATION_JSON_VALUE)
 public class OrderController {
+    /**
+     * The User service.
+     */
     @Autowired
     UserService userService;
 
+    /**
+     * The Order service.
+     */
     @Autowired
     OrderService orderService;
 
+    /**
+     * The Class to dto service.
+     */
     @Autowired
     ClassToDtoService classToDtoService;
 
@@ -45,6 +57,13 @@ public class OrderController {
         return currentUser;
     }
 
+    /**
+     * Create order response entity.
+     *
+     * @param createOrderDtoPayload the create order dto payload
+     * @return the response entity
+     * @throws Exception the exception
+     */
     @PostMapping("/create_order")
     public ResponseEntity<OrderDto> createOrder(@RequestBody CreateOrderDtoPayload createOrderDtoPayload) throws Exception {
         User currUser = getAuthentificatedUser();
@@ -58,6 +77,11 @@ public class OrderController {
         return ResponseEntity.ok(orderService.createNewOrder(createOrderDtoPayload));
     }
 
+    /**
+     * Gets all user orders.
+     *
+     * @return the all user orders
+     */
     @GetMapping("/all")
     public  ResponseEntity<List<OrderDto>> getAllUserOrders() {
         List<OrderDto> orderDtoList = new ArrayList<>();
@@ -67,6 +91,12 @@ public class OrderController {
         return ResponseEntity.ok(orderDtoList);
     }
 
+    /**
+     * Gets user orders between dates.
+     *
+     * @param dateFilterDtoPayload the date filter dto payload
+     * @return the user orders between dates
+     */
     @PostMapping("/filter_dates")
     public  ResponseEntity<List<OrderDto>> getUserOrdersBetweenDates(@RequestBody DateFilterDtoPayload dateFilterDtoPayload) {
         return ResponseEntity.ok(orderService.findOrdersBetweenDates(
@@ -76,6 +106,12 @@ public class OrderController {
         ));
     }
 
+    /**
+     * Gets all user orders admin.
+     *
+     * @param id the id
+     * @return the all user orders admin
+     */
     @GetMapping("/admin/orders")
     public  ResponseEntity<List<OrderDto>> getAllUserOrdersAdmin(@RequestParam long id) {
         List<OrderDto> orderDtoList = new ArrayList<>();
@@ -85,6 +121,14 @@ public class OrderController {
         return ResponseEntity.ok(orderDtoList);
     }
 
+    /**
+     * Gets user orders between dates by user id admin.
+     *
+     * @param id                   the id
+     * @param date1                the date 1
+     * @param dateFilterDtoPayload the date filter dto payload
+     * @return the user orders between dates by user id admin
+     */
     @PostMapping("/admin/orders_filterred_dates")
     public  ResponseEntity<List<OrderDto>> getUserOrdersBetweenDatesByUserIdAdmin(
             @RequestParam long id,
@@ -98,6 +142,12 @@ public class OrderController {
         ));
     }
 
+    /**
+     * Gets order by id.
+     *
+     * @param orderId the order id
+     * @return the order by id
+     */
     @GetMapping("/get_order_by_id")
     public ResponseEntity<OrderDto> getOrderById(@RequestParam long orderId) {
         return ResponseEntity.ok(orderService.getOrderById(orderId));

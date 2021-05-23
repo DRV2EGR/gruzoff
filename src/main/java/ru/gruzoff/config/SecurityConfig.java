@@ -76,6 +76,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers( "/v1/api/cars/private/**").hasAnyRole("DRIVER", "ADMIN", "MANAGER")
 
                     .antMatchers(MANAGER_ENDPOINT).hasAnyRole("ADMIN", "MANAGER")
+
+
                     .anyRequest().authenticated()
                 .and()
                 .formLogin().disable()
