@@ -13,6 +13,9 @@ import org.springframework.stereotype.Service;
 import ru.gruzoff.entity.Order;
 import ru.gruzoff.entity.User;
 
+/**
+ * The type Mail service.
+ */
 @Service
 @Slf4j
 public class MailService {
@@ -22,8 +25,18 @@ public class MailService {
     @Value("${spring.mail.username}")
     private String username;
 
+    /**
+     * The Logger.
+     */
     Logger logger = LoggerFactory.getLogger("emailLogger");
 
+    /**
+     * Send.
+     *
+     * @param emailTo the email to
+     * @param subject the subject
+     * @param message the message
+     */
     public void send(String emailTo, String subject, String message) {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
 
@@ -36,6 +49,15 @@ public class MailService {
         mailSender.send(mailMessage);
     }
 
+    /**
+     * Complete registration email string.
+     *
+     * @param secondName     the second name
+     * @param lastName       the last name
+     * @param role           the role
+     * @param activationCode the activation code
+     * @return the string
+     */
     public String completeRegistrationEmail(String secondName, String lastName, String role, String activationCode) {
         String message = String.format(
                 "Здравствуйте, %s %s! \n" +
@@ -51,6 +73,13 @@ public class MailService {
         return message;
     }
 
+    /**
+     * Creation order notify string.
+     *
+     * @param user  the user
+     * @param order the order
+     * @return the string
+     */
     public String creationOrderNotify(User user, Order order) {
         String message = String.format(
                 "Здравствуйте, %s %s! \n" +
@@ -69,6 +98,13 @@ public class MailService {
         return message;
     }
 
+    /**
+     * Accepted order notify string.
+     *
+     * @param user  the user
+     * @param order the order
+     * @return the string
+     */
     public String acceptedOrderNotify(User user, Order order) {
         String message = String.format(
                 "Здравствуйте, %s %s! \n" +

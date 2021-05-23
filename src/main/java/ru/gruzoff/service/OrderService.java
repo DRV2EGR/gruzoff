@@ -19,9 +19,15 @@ import ru.gruzoff.payload.CreateOrderDtoPayload;
 import ru.gruzoff.payload.UserDtoPayload;
 import ru.gruzoff.repository.*;
 
+/**
+ * The type Order service.
+ */
 @Service
 @Slf4j
 public class OrderService {
+    /**
+     * The User service.
+     */
     @Autowired
     UserService userService;
 
@@ -40,35 +46,71 @@ public class OrderService {
     @Autowired
     private RoleRepository roleRepository;
 
+    /**
+     * The User repository.
+     */
     @Autowired
     UserRepository userRepository;
 
+    /**
+     * The Order details reposirory.
+     */
     @Autowired
     OrderDetailsReposirory orderDetailsReposirory;
 
+    /**
+     * The Class to dto service.
+     */
     @Autowired
     ClassToDtoService classToDtoService;
 
+    /**
+     * The Adress repository.
+     */
     @Autowired
     AdressRepository adressRepository;
 
+    /**
+     * The Geocoder.
+     */
     @Autowired
     GeocoderService geocoder;
 
+    /**
+     * The Car type repository.
+     */
     @Autowired
     CarTypeRepository carTypeRepository;
 
+    /**
+     * The Car repository.
+     */
     @Autowired
     CarRepository carRepository;
 
+    /**
+     * The Car validity repository.
+     */
     @Autowired
     CarValidityRepository carValidityRepository;
 
+    /**
+     * The Mail service.
+     */
     @Autowired
     MailService mailService;
 
+    /**
+     * The Logger.
+     */
     Logger logger = LoggerFactory.getLogger("orderLogger");
 
+    /**
+     * Gets order by id.
+     *
+     * @param orderId the order id
+     * @return the order by id
+     */
     public OrderDto getOrderById(long orderId) {
         return classToDtoService.convertOrderToOrderDto(
                 orderReposiory.findById(orderId).orElseThrow(
@@ -77,6 +119,13 @@ public class OrderService {
         );
     }
 
+    /**
+     * Create new order order dto.
+     *
+     * @param createOrderDtoPayload the create order dto payload
+     * @return the order dto
+     * @throws Exception the exception
+     */
     public OrderDto createNewOrder(CreateOrderDtoPayload createOrderDtoPayload) throws Exception {
         User user = userService.findById(createOrderDtoPayload.getCustomerId()).orElseThrow(
                 () -> new UserNotFoundExeption("Main customer not found!")
@@ -168,6 +217,14 @@ public class OrderService {
         return classToDtoService.convertOrderToOrderDto(order);
     }
 
+    /**
+     * Find orders between dates list.
+     *
+     * @param user the user
+     * @param d1   the d 1
+     * @param d2   the d 2
+     * @return the list
+     */
     public List<OrderDto> findOrdersBetweenDates(User user, Date d1, Date d2) {
         List<OrderDto> ordersRes = new ArrayList<>();
         for (Order order : user.getOrders()) {
@@ -180,6 +237,13 @@ public class OrderService {
         return ordersRes;
     }
 
+    /**
+     * Find orders on date list.
+     *
+     * @param user the user
+     * @param d1   the d 1
+     * @return the list
+     */
     public List<OrderDto> findOrdersOnDate(User user, Date d1) {
         List<OrderDto> ordersRes = new ArrayList<>();
 
@@ -203,6 +267,12 @@ public class OrderService {
         return ordersRes;
     }
 
+    /**
+     * Find all worker orders list.
+     *
+     * @param user the user
+     * @return the list
+     */
     public List<OrderDto> findAllWorkerOrders(User user) {
         List<OrderDto> ordersRes = new ArrayList<>();
 
@@ -222,6 +292,14 @@ public class OrderService {
         return ordersRes;
     }
 
+    /**
+     * Take order to driver boolean.
+     *
+     * @param user    the user
+     * @param carId   the car id
+     * @param orderId the order id
+     * @return the boolean
+     */
     public boolean takeOrderToDriver(User user, long carId, long orderId) {
         Drivers driver = driversRepository.findByUser(user).orElseThrow(
                 () -> new UserNotFoundExeption("No such driver")
@@ -262,6 +340,13 @@ public class OrderService {
         return true;
     }
 
+    /**
+     * Take order to loader boolean.
+     *
+     * @param user    the user
+     * @param orderId the order id
+     * @return the boolean
+     */
     public boolean takeOrderToLoader(User user, long orderId) {
         Loaders loader = loadersRepository.findByUser(user).orElseThrow(
                 () -> new UserNotFoundExeption("No such loader")
@@ -289,6 +374,13 @@ public class OrderService {
         return flag;
     }
 
+    /**
+     * Show relevent orders on day list.
+     *
+     * @param date           the date
+     * @param driverOrLoader the driver or loader
+     * @return the list
+     */
     public List<OrderDto> showReleventOrdersOnDay(Date date, int driverOrLoader) {
         List<OrderDto> orderDtoList = new ArrayList<>();
 
@@ -312,6 +404,14 @@ public class OrderService {
         return orderDtoList;
     }
 
+    /**
+     * Reject worker accepted order boolean.
+     *
+     * @param user           the user
+     * @param orderId        the order id
+     * @param driverOrLoader the driver or loader
+     * @return the boolean
+     */
     public boolean rejectWorkerAcceptedOrder(User user, long orderId, int driverOrLoader) {
 
         Order order = orderReposiory.findById(orderId).orElseThrow(
@@ -348,6 +448,12 @@ public class OrderService {
         return false;
     }
 
+    /**
+     * Gets all driver cars.
+     *
+     * @param user the user
+     * @return the all driver cars
+     */
     public List<CarWithCarValidDto> getAllDriverCars(User user) {
         List<Car> carList = driversRepository.findByUser(user).orElseThrow(
                 () -> new NotFoundException("No such driver")

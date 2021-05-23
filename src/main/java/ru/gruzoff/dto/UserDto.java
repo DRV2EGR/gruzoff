@@ -41,6 +41,11 @@ public class UserDto {
         this.role = role;
     }
 
+    /**
+     * Instantiates a new User dto.
+     *
+     * @param user the user
+     */
     public UserDto(User user) {
         this.firstName = user.getFirstName();
         this.secondName = user.getSecondName();

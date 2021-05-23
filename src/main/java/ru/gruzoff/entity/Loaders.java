@@ -7,6 +7,9 @@ import javax.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * The type Loaders.
+ */
 @Entity
 @Table(name ="loaders")
 @Data

@@ -17,23 +17,48 @@ import ru.gruzoff.repository.CarTypeRepository;
 import ru.gruzoff.repository.CarValidityRepository;
 import ru.gruzoff.repository.DriversRepository;
 
+/**
+ * The type Car service.
+ */
 @Service
 public class CarService {
+    /**
+     * The Car repository.
+     */
     @Autowired
     CarRepository carRepository;
 
+    /**
+     * The Car type repository.
+     */
     @Autowired
     CarTypeRepository carTypeRepository;
 
+    /**
+     * The Drivers repository.
+     */
     @Autowired
     DriversRepository driversRepository;
 
+    /**
+     * The Car validity repository.
+     */
     @Autowired
     CarValidityRepository carValidityRepository;
 
+    /**
+     * The Class to dto service.
+     */
     @Autowired
     ClassToDtoService classToDtoService;
 
+    /**
+     * Add new car car dto.
+     *
+     * @param user                the user
+     * @param addNewCarDtoPayload the add new car dto payload
+     * @return the car dto
+     */
     public CarDto addNewCar(User user, AddNewCarDtoPayload addNewCarDtoPayload) {
         if (user.getRole().getName().equals("ROLE_DRIVER")) {
             Car car = new Car(
@@ -100,6 +125,11 @@ public class CarService {
         }
     }
 
+    /**
+     * Gets all valid cars.
+     *
+     * @return the all valid cars
+     */
     public List<CarDto> getAllValidCars() {
         List<CarDto> carDtoList = new ArrayList<>();
         for (Car car : carRepository.findAll()) {
@@ -112,6 +142,11 @@ public class CarService {
         return carDtoList;
     }
 
+    /**
+     * Gets all car types.
+     *
+     * @return the all car types
+     */
     public List<CarTypeDto> getAllCarTypes() {
         List<CarTypeDto> carTypesDtoList = new ArrayList<>();
         for (CarType carType : carTypeRepository.findAll()) {
@@ -121,6 +156,12 @@ public class CarService {
         return carTypesDtoList;
     }
 
+    /**
+     * Disvalid car by id boolean.
+     *
+     * @param carId the car id
+     * @return the boolean
+     */
     public boolean disvalidCarById(long carId) {
         CarValidity carValidity = carValidityRepository.findByCarId(
                 carRepository.findById(carId).orElseThrow(
@@ -141,6 +182,11 @@ public class CarService {
         return false;
     }
 
+    /**
+     * Gets all cars.
+     *
+     * @return the all cars
+     */
     public List<CarWithCarValidDto> getAllCars() {
         List<CarWithCarValidDto> carDtoList = new ArrayList<>();
         for (Car car : carRepository.findAll()) {
@@ -150,6 +196,13 @@ public class CarService {
         return carDtoList;
     }
 
+    /**
+     * Change car valid.
+     *
+     * @param carId  the car id
+     * @param v      the v
+     * @param reason the reason
+     */
     public void changeCarValid(long carId, int v, String reason) {
         CarValidity carValidity = carValidityRepository.findByCarId(
                 carRepository.findById(carId).orElseThrow(

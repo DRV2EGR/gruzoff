@@ -20,6 +20,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ru.gruzoff.exception.BadRequestException;
 
+/**
+ * The type Geocoder service.
+ */
 @Service
 public class GeocoderService {
     @Value("${geocoding.api.key}")
@@ -28,6 +31,13 @@ public class GeocoderService {
     private static final String GEOCODING_ADDRESS = "https://geocoder.ls.hereapi.com/6.2/geocode.json";
     private static final String GEOCODING_CALCULATE_ROUTE = "https://route.ls.hereapi.com/routing/7.2/calculateroute.json";
 
+    /**
+     * Geocode sync list.
+     *
+     * @param query the query
+     * @return the list
+     * @throws Exception the exception
+     */
     public List<Float> GeocodeSync(String query) throws Exception {
         String encodedQuery = URLEncoder.encode(query, StandardCharsets.UTF_8);
         String requestUri = GEOCODING_ADDRESS + "?apiKey=" + API_KEY + "&searchtext=" + encodedQuery;
@@ -75,6 +85,16 @@ public class GeocoderService {
         );
     }
 
+    /**
+     * Geocode route float.
+     *
+     * @param lat0 the lat 0
+     * @param lon0 the lon 0
+     * @param lat1 the lat 1
+     * @param lon1 the lon 1
+     * @return the float
+     * @throws IOException the io exception
+     */
     public float GeocodeRoute(float lat0, float lon0, float lat1, float lon1) throws IOException {
         String waypoint0 = URLEncoder.encode("geo!"+String.valueOf(lat0)+","+String.valueOf(lon0), StandardCharsets.UTF_8);
         String waypoint1 = URLEncoder.encode("geo!"+String.valueOf(lat1)+","+String.valueOf(lon1), StandardCharsets.UTF_8);

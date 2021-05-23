@@ -8,6 +8,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
+/**
+ * The type Mail config.
+ */
 @Configuration
 public class MailConfig {
     @Value("${spring.mail.host}")
@@ -28,6 +31,11 @@ public class MailConfig {
     @Value("${mail.debug}")
     private String debug;
 
+    /**
+     * Gets mail sender.
+     *
+     * @return the mail sender
+     */
     @Bean
     public JavaMailSender getMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();

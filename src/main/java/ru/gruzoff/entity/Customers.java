@@ -7,6 +7,9 @@ import javax.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * The type Customers.
+ */
 @Entity
 @Table(name ="customers")
 @Data
