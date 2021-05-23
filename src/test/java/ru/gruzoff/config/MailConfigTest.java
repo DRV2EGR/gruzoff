@@ -12,13 +12,13 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 //@ContextConfiguration(classes = {MailConfig.class})
 //@ExtendWith(SpringExtension.class)
-//public class MailConfigTest {
+public class MailConfigTest {
 //    @Autowired
 //    private MailConfig mailConfig;
 //
-//    @Test
-//    public void testGetMailSender() {
+    @Test
+    public void testGetMailSender() {
 //        assertTrue(this.mailConfig.getMailSender() instanceof org.springframework.mail.javamail.JavaMailSenderImpl);
-//    }
-//}
+    }
+}
 
