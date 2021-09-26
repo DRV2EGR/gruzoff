@@ -218,12 +218,12 @@ public class OrderService {
     }
 
     /**
-     * Find orders between dates list.
+     * Найти заказы пользователя между 2мя датами
      *
-     * @param user the user
-     * @param d1   the d 1
-     * @param d2   the d 2
-     * @return the list
+     * @param user пользователь
+     * @param d1   дата начачала интервала
+     * @param d2   дата конца интервала
+     * @return List[OrderDto] массив представления заказов для пользователя
      */
     public List<OrderDto> findOrdersBetweenDates(User user, Date d1, Date d2) {
         List<OrderDto> ordersRes = new ArrayList<>();
@@ -238,11 +238,11 @@ public class OrderService {
     }
 
     /**
-     * Find orders on date list.
+     * Найти заказы пользователя на определенную дату
      *
-     * @param user the user
-     * @param d1   the d 1
-     * @return the list
+     * @param user пользователь
+     * @param d1   дата поиска
+     * @return List[OrderDto] массив представления заказов для пользователя
      */
     public List<OrderDto> findOrdersOnDate(User user, Date d1) {
         List<OrderDto> ordersRes = new ArrayList<>();

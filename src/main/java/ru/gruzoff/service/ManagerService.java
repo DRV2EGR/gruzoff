@@ -45,9 +45,11 @@ public class ManagerService {
     Logger logger = LoggerFactory.getLogger("orderLogger");
 
     /**
-     * Gets orders to accept.
+     * Подучить заказы на ручное соглосование
      *
-     * @return the orders to accept
+     * @return List[OrderDto] - список заказов для согласования
+     *
+     * @see OrderDto
      */
     public List<OrderDto> getOrdersToAccept() {
         List<OrderDto> orderDtoList = new ArrayList<>();
@@ -62,10 +64,13 @@ public class ManagerService {
     }
 
     /**
-     * Accept by id.
+     * Подтверить заказ по id (поставляется статус IN_WORK).
+     * Так же отправляется сообщение пользователю о подтверждении
      *
-     * @param orderId the order id
-     * @param st      the st
+     * @throws NotFoundException если orderReposiory.findById(orderId) передан неверный orderId
+     *
+     * @param orderId id заказа
+     * @param st      статус заказа (1 - подтвержден, 2 - отклонен)
      */
     public void acceptById(long orderId, int st) {
         if (st == 1) { //Accept

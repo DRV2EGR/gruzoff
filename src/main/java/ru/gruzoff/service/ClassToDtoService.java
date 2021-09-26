@@ -46,10 +46,22 @@ public class ClassToDtoService
 //    }
 
     /**
-     * Convert adress to adress dto adress dto.
+     * Конвертирует Adress в AdresDto (убирает геокоординаты).
      *
-     * @param adress the adress
-     * @return the adress dto
+     * @param adress адресс в формате сущности.
+     *               {
+     *                      String country;
+     *                      String town;
+     *                      String street;
+     *                      String houseNomber;
+     *                      String extraHouseDefinition;
+     *                      float latitude;
+     *                      float longitude;
+     *               }
+     * @see Adress
+     *
+     * @return AdressDto пользовательское представление адреса
+     * @see AdressDto
      */
     public AdressDto convertAdressToAdressDto(Adress adress) {
         return new AdressDto(
@@ -62,10 +74,24 @@ public class ClassToDtoService
     }
 
     /**
-     * Convert order details to order details dto order details dto.
+     * Конвертирует OrderDetails в OrderDetailsDto.
      *
-     * @param orderDetails the order details
-     * @return the order details dto
+     * @param orderDetails детали заказа в формате
+     *                     {
+     *                       Adress adressFrom;
+     *                       Adress adressTo;
+     *                       Date dateTime;
+     *                       float timeOnOrder;
+     *                       int loadersCapacity;
+     *                       CarType carType;
+     *                       String comment;
+     *                     }
+     *
+     * @see OrderDetails
+     * @see Adress
+     *
+     * @return OrderDetailsDto пользовательское представление деталей заказа
+     * @see OrderDetailsDto
      */
     public OrderDetailsDto convertOrderDetailsToOrderDetailsDto(OrderDetails orderDetails) {
         OrderDetailsDto orderDetailsDto = new OrderDetailsDto();
@@ -82,10 +108,24 @@ public class ClassToDtoService
     }
 
     /**
-     * Convert car to car dto car dto.
+     * Конвертирует Car в CarDto.
      *
-     * @param car the car
-     * @return the car dto
+     * @param car описание машины в формате
+     *            {
+     *               int max_weight;
+     *               int length;
+     *               int width;
+     *               int height;
+     *               int size;
+     *               int maxPeopleCapacity;
+     *               CarType type;
+     *               String gosNomber;
+     *            }
+     * @see Car
+     * @see CarType
+     *
+     * @return CarDto пользовательское представление для машины
+     * @see CarDto
      */
     public CarDto convertCarToCarDto(Car car) {
         if (car == null) { return null; }

@@ -53,11 +53,24 @@ public class CarService {
     ClassToDtoService classToDtoService;
 
     /**
-     * Add new car car dto.
+     * Создает новую машину в сервисе.
      *
-     * @param user                the user
-     * @param addNewCarDtoPayload the add new car dto payload
-     * @return the car dto
+     * Если в описании машины не указан водитель, то он не проставляется
+     *
+     * @param user                Пользователь, который отправил запрос на создание.
+     * @param addNewCarDtoPayload описание новой машины в формате
+     *                            {
+     *                                 long driverId;
+     *                                 int max_weight;
+     *                                 int length;
+     *                                 int width;
+     *                                 int height;
+     *                                 int size;
+     *                                 int maxPeopleCapacity;
+     *                                 long type;
+     *                                 String gosNomber;
+     *                            }
+     * @return CarDto редставление машины для пользователя в системе
      */
     public CarDto addNewCar(User user, AddNewCarDtoPayload addNewCarDtoPayload) {
         if (user.getRole().getName().equals("ROLE_DRIVER")) {
@@ -126,9 +139,11 @@ public class CarService {
     }
 
     /**
-     * Gets all valid cars.
+     * Найти все действующие машины в базе
      *
-     * @return the all valid cars
+     * @throws NotFoundException если arRepository.findAll() выдал не существующие id
+     *
+     * @return List[CarDto] массив машин в виде представлений для пользователя
      */
     public List<CarDto> getAllValidCars() {
         List<CarDto> carDtoList = new ArrayList<>();
@@ -143,9 +158,9 @@ public class CarService {
     }
 
     /**
-     * Gets all car types.
+     * Получить все типы машин
      *
-     * @return the all car types
+     * @return List[CarTypeDto] массив машин в виде представлений для пользователя
      */
     public List<CarTypeDto> getAllCarTypes() {
         List<CarTypeDto> carTypesDtoList = new ArrayList<>();
@@ -157,10 +172,14 @@ public class CarService {
     }
 
     /**
-     * Disvalid car by id boolean.
+     * Сделать машину не действующей (отстранить)
+     * По причине удаления пользователя
      *
-     * @param carId the car id
-     * @return the boolean
+     * @throws NotFoundException если carRepository.findById(carId) получил не существующий id
+     * @throws NotFoundException если carValidityRepository.findByCarId() получил не существующий id
+     *
+     * @param carId id машины, которую следует отстранить
+     * @return boolean флаг выполнения действия
      */
     public boolean disvalidCarById(long carId) {
         CarValidity carValidity = carValidityRepository.findByCarId(
@@ -183,9 +202,9 @@ public class CarService {
     }
 
     /**
-     * Gets all cars.
+     * Получить все машины
      *
-     * @return the all cars
+     * @return List[CarWithCarValidDto] массив машин в виде представлений для пользователя
      */
     public List<CarWithCarValidDto> getAllCars() {
         List<CarWithCarValidDto> carDtoList = new ArrayList<>();
@@ -197,11 +216,15 @@ public class CarService {
     }
 
     /**
-     * Change car valid.
+     * Изменить доступность машины с указанием причины
      *
-     * @param carId  the car id
-     * @param v      the v
-     * @param reason the reason
+     * @throws NotFoundException если carRepository.findById(carId) получил не существующий id
+     * @throws NotFoundException если carValidityRepository.findByCarId() получил не существующий id
+     *
+     * @param carId id машины
+     * @param v новый статус машины
+     * @param reason причина смены статуса
+     *
      */
     public void changeCarValid(long carId, int v, String reason) {
         CarValidity carValidity = carValidityRepository.findByCarId(
