@@ -1,18 +1,12 @@
 package ru.gruzoff.service;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.Test;
@@ -185,23 +179,74 @@ public class OrderServiceTest {
 
         assertThrows(Exception.class, () -> this.orderService.createNewOrder(createOrderDtoPayload));
     }
+//    Выполняется путем поиска водителя (driversRepository.findByUser(user).isPresent())
+//    Затем поиском заказов по id водителя orderReposiory.findAllByDriverId(), если таковые найдены
+//    Затем для грузчика поиск по пользователю (loadersRepository.findByUser(user).isPresent())) и
+//    выборка заказов по id грузчика orderReposiory.findAllByLoadersContaining(loader), если таковые найдены
+    @Test
+    public void testFindOrdersOnDate_notNull(){
+        User user = new User();
+        Date date = new Date(17);
+
+        OrderDetails orderDetails = new OrderDetails(); orderDetails.setDateTime(date);
+        Order order = new Order(); order.setOrderDetails(orderDetails);
+        Drivers drivers = new Drivers();
+        Loaders loaders = new Loaders();
+        ArrayList<Optional<Order>> list = new ArrayList<Optional<Order>>();; list.add(Optional.of(order));
+
+        when(this.driversRepository.findByUser(user)).thenReturn(Optional.of(drivers));
+        when(orderReposiory.findAllByDriverId((Drivers) any())).thenReturn(list);
+
+        when(this.loadersRepository.findByUser(user)).thenReturn(Optional.of(loaders));
+        when(this.orderReposiory.findAllByLoadersContaining((Loaders) any())).thenReturn(list);
+
+        assertNotNull(orderService.findOrdersOnDate(user, date));
+        verify(this.driversRepository, times(2)).findByUser((User) any());
+        verify(this.orderReposiory).findAllByDriverId((Drivers) any());
+        verify(this.orderReposiory).findAllByLoadersContaining((Loaders) any());
+    }
 
     @Test
-    public void testFindOrdersOnDate(){
-        ArrayList list = new ArrayList();
-        Order order = new Order();
-        list.add(order);
-
+    public void testFindOrdersOnDate_size_correct(){
         User user = new User();
+        Date date = new Date(17);
 
-        when(this.driversRepository.findByUser(user).isPresent()).thenReturn(true);
-        when(this.driversRepository.findByUser(user).get()).thenReturn();
+        OrderDetails orderDetails = new OrderDetails(); orderDetails.setDateTime(date);
+        Order order = new Order(); order.setOrderDetails(orderDetails);
+        Drivers drivers = new Drivers();
+        Loaders loaders = new Loaders();
+        ArrayList<Optional<Order>> list1 = new ArrayList<Optional<Order>>();; list1.add(Optional.of(order));
+        ArrayList<Optional<Order>> list2 = new ArrayList<Optional<Order>>();; list2.add(Optional.of(order));
 
+        when(this.driversRepository.findByUser(user)).thenReturn(Optional.of(drivers));
+        when(orderReposiory.findAllByDriverId((Drivers) any())).thenReturn(list1);
 
+        when(this.loadersRepository.findByUser(user)).thenReturn(Optional.of(loaders));
+        when(this.orderReposiory.findAllByLoadersContaining((Loaders) any())).thenReturn(list2);
 
-        Date date1 = new Date(11);
+        assertEquals(1, this.orderService.findOrdersOnDate(user, date).size());
+        assertEquals(date, this.orderService.findOrdersOnDate(user, date).get(0).getOrderDetails().getDateTime());
+    }
 
-        when(user.getOrders());
+    @Test
+    public void testFindOrdersOnDate_driverOnly(){
+        User user = new User();
+        Date date = new Date(17);
+
+        OrderDetails orderDetails = new OrderDetails(); orderDetails.setDateTime(date);
+        Order order = new Order(); order.setOrderDetails(orderDetails);
+        Drivers drivers = new Drivers();
+        Loaders loaders = new Loaders();
+        ArrayList<Optional<Order>> list1 = new ArrayList<Optional<Order>>();; list1.add(Optional.of(order));
+
+        when(this.driversRepository.findByUser(user)).thenReturn(Optional.of(drivers));
+        when(orderReposiory.findAllByDriverId((Drivers) any())).thenReturn(list1);
+
+        when(this.loadersRepository.findByUser(user)).thenReturn(Optional.empty());
+        when(this.orderReposiory.findAllByLoadersContaining((Loaders) any())).thenReturn(Arrays.asList());
+
+        assertEquals(1, this.orderService.findOrdersOnDate(user, date).size());
+        //assertEquals(date, this.orderService.findOrdersOnDate(user, date).get(0).getOrderDetails().getDateTime());
     }
 }
 
