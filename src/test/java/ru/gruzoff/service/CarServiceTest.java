@@ -8,7 +8,9 @@ import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.lang.management.OperatingSystemMXBean;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
@@ -22,16 +24,14 @@ import org.springframework.test.context.junit4.SpringRunner;
 import ru.gruzoff.dto.CarDto;
 import ru.gruzoff.dto.CarTypeDto;
 import ru.gruzoff.dto.CarWithCarValidDto;
-import ru.gruzoff.entity.Car;
-import ru.gruzoff.entity.CarType;
-import ru.gruzoff.entity.CarValidity;
+import ru.gruzoff.entity.*;
 import ru.gruzoff.exception.NotFoundException;
+import ru.gruzoff.payload.AddNewCarDtoPayload;
 import ru.gruzoff.repository.CarRepository;
 import ru.gruzoff.repository.CarTypeRepository;
 import ru.gruzoff.repository.CarValidityRepository;
 import ru.gruzoff.repository.DriversRepository;
 
-@RunWith(SpringRunner.class)
 @ContextConfiguration(classes = {ClassToDtoService.class, CarService.class})
 @ExtendWith(SpringExtension.class)
 public class CarServiceTest {
@@ -660,6 +660,95 @@ public class CarServiceTest {
 //        verify(this.carRepository).findById((Long) any());
 //    }
 
+    @Test
+    public void testAddNewCar_null(){
+        Role role = new Role(); role.setName("ROLE_DRIVER");
+        User user = new User(); user.setRole(role);
+        AddNewCarDtoPayload addNewCarDtoPayload = new AddNewCarDtoPayload();
+        addNewCarDtoPayload.setType(1);
+
+        Car car = new Car();
+
+        when(this.carTypeRepository.findById(addNewCarDtoPayload.getType())).thenReturn(Optional.of(new CarType()));
+
+        when(this.carRepository.save(car)).thenReturn(car);
+
+        CarValidity carValidity = new CarValidity();
+        carValidity.setValid(true);
+        carValidity.setCarId(car);
+
+        when(this.carValidityRepository.save(carValidity)).thenReturn(carValidity);
+
+        Drivers drivers = new Drivers();
+        when(this.driversRepository.findByUser(user)).thenReturn(Optional.of(drivers));
+        drivers.setCars(new ArrayList<>());
+
+        when(this.driversRepository.save(drivers)).thenReturn(drivers);
+
+        CarDto carDto = new CarDto();
+
+        assertEquals(carDto, this.carService.addNewCar(user, addNewCarDtoPayload));
+    }
+
+
+
+//    @Test
+//    public void testAddNewCar_correct(){
+//        Role role = new Role(); role.setName("ROLE_DRIVER");
+//        User user = new User(); user.setRole(role);
+//        AddNewCarDtoPayload addNewCarDtoPayload = new AddNewCarDtoPayload();
+//        addNewCarDtoPayload.setType(1);
+//        addNewCarDtoPayload.setGosNomber("666hui");
+//        addNewCarDtoPayload.setHeight(200);
+//        addNewCarDtoPayload.setLength(250);
+//        addNewCarDtoPayload.setWidth(150);
+//        addNewCarDtoPayload.setMax_weight(300);
+//        addNewCarDtoPayload.setMaxPeopleCapacity(5);
+//        addNewCarDtoPayload.setSize(100000);
+//        addNewCarDtoPayload.setDriverId(1);
+//
+//
+//        Car car = new Car();
+//        car.setMax_weight(300);
+//        car.setLength(250);
+//        car.setWidth(150);
+//        car.setHeight(200);
+//        car.setSize(100000);
+//        car.setMaxPeopleCapacity(5);
+//
+//        CarType carType = new CarType(); carType.setId(1);
+//
+//        car.setType(carType);
+//        car.setGosNomber("666hui");
+//
+//        CarDto carDto = new CarDto();
+//        carDto.setGosNomber("666hui");
+//        carDto.setHeight(200);
+//        carDto.setLength(250);
+//        carDto.setWidth(150);
+//        carDto.setMax_weight(300);
+//        carDto.setMaxPeopleCapacity(5);
+//        carDto.setSize(100000);
+//        carDto.setType(1);
+//
+//        when(this.carTypeRepository.findById(addNewCarDtoPayload.getType())).thenReturn(Optional.of(new CarType()));
+//
+//        when(this.carRepository.save(car)).thenReturn(car);
+//
+//        CarValidity carValidity = new CarValidity();
+//        carValidity.setValid(true);
+//        carValidity.setCarId(car);
+//
+//        when(this.carValidityRepository.save(carValidity)).thenReturn(carValidity);
+//
+//        Drivers drivers = new Drivers(); drivers.setId(1);
+//        when(this.driversRepository.findByUser(user)).thenReturn(Optional.of(drivers));
+//        drivers.setCars(new ArrayList<>());
+//
+//        when(this.driversRepository.save(drivers)).thenReturn(drivers);
+//
+//        assertEquals(carDto, this.carService.addNewCar(user, addNewCarDtoPayload));
+//    }
 
 }
 
