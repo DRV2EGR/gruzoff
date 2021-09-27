@@ -46,7 +46,7 @@ public class ClassToDtoService
 //    }
 
     /**
-     * Конвертирует Adress в AdresDto (убирает геокоординаты).
+     * <h4>Конвертирует Adress в AdresDto (игнорирует геокоординаты).</h4>
      *
      * @param adress адресс в формате сущности.
      *               {
@@ -74,7 +74,7 @@ public class ClassToDtoService
     }
 
     /**
-     * Конвертирует OrderDetails в OrderDetailsDto.
+     * <h4>Конвертирует OrderDetails в OrderDetailsDto.</h4>
      *
      * @param orderDetails детали заказа в формате
      *                     {
