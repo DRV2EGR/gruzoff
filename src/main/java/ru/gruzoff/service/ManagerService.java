@@ -45,7 +45,10 @@ public class ManagerService {
     Logger logger = LoggerFactory.getLogger("orderLogger");
 
     /**
-     * Подучить заказы на ручное соглосование
+     * <h4>Подучить заказы на ручное соглосование</h4>
+     *
+     * Выполняется путем поиска заказов в базе
+     * по статусу "WAIT_APPROVE". - orderReposiory.findAllByStatus("WAIT_APPROVE")
      *
      * @return List[OrderDto] - список заказов для согласования
      *
@@ -64,10 +67,23 @@ public class ManagerService {
     }
 
     /**
-     * Подтверить заказ по id (поставляется статус IN_WORK).
+     * <h4>Подтверить заказ по id (поставляется статус IN_WORK).</h4>
      * Так же отправляется сообщение пользователю о подтверждении
+     * <br />
+     * <b>При подтверждении.</b>
+     * Находит заказ в базе (rderReposiory.findById(orderId))
+     * устанавливает статус "IN_WORK" и отправляет
+     * письмо (mailService.send()) об изменении статуса.
+     * Затем просто сохраняет заказ в базе.
+     * <br />
+     * <b>При отказе</b>
+     * Находит заказ в базе (rderReposiory.findById(orderId))
+     * устанавливает статус "DELETED.
+     * Затем просто сохраняет заказ в базе.
      *
      * @throws NotFoundException если orderReposiory.findById(orderId) передан неверный orderId
+     *
+     *
      *
      * @param orderId id заказа
      * @param st      статус заказа (1 - подтвержден, 2 - отклонен)

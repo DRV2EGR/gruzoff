@@ -218,7 +218,11 @@ public class OrderService {
     }
 
     /**
-     * Найти заказы пользователя между 2мя датами
+     * <h4>Найти заказы пользователя между 2мя датами</h4>
+     * <br />
+     * Получайет все заказы пользователя user.getOrders()
+     * Затем, проходя по каждому заказу смотрит, чтобы в OrderDetails дата была
+     * между нужными.
      *
      * @param user пользователь
      * @param d1   дата начачала интервала
@@ -238,7 +242,14 @@ public class OrderService {
     }
 
     /**
-     * Найти заказы пользователя на определенную дату
+     * <h4>Найти заказы пользователя на определенную дату (водители и грузчики)</h4>
+     * <br />
+     *
+     * Выполняется путем поиска водителя (driversRepository.findByUser(user).isPresent())
+     * Затем поиском заказов по id водителя orderReposiory.findAllByDriverId(), если таковые найдены
+     * <br />
+     * Затем для грузчика поиск по пользователю (loadersRepository.findByUser(user).isPresent()))
+     * и выборка заказов по id грузчика orderReposiory.findAllByLoadersContaining(loader), если таковые найдены
      *
      * @param user пользователь
      * @param d1   дата поиска

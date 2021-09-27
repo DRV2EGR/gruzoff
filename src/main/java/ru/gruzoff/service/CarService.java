@@ -53,12 +53,37 @@ public class CarService {
     ClassToDtoService classToDtoService;
 
     /**
-     * Создает новую машину в сервисе.
+     * <h4>Создает новую машину в сервисе.</h4>
+     *<br />
+     * Если у пользователя роль ROLE_DRIVER, то
+     * Создается новая сущность автомобиля
+     * с присвоением типа carTypeRepository.findById(addNewCarDtoPayload.getType())
+     * затем сохраняется carRepository.save(car)
+     * Затем создается запись CarValidity и поставляется
+     * данному автомобилю значение isValid true
+     * и сохраняется carValidityRepository.save(carValidity);
+     * Затем находится водитель driversRepository.findByUser(user)
+     * ему добавляется новая машина и сохраняется он driversRepository.save(driver)
+     * <br />
+     * Иначе, если роль пользователя иная (Будет ROLE_ADMIN)
+     * Создается новая сущность автомобиля
+     * с присвоением типа carTypeRepository.findById(addNewCarDtoPayload.getType())
+     * затем сохраняется carRepository.save(car)
+     * Затем создается запись CarValidity и поставляется
+     * данному автомобилю значение isValid true
+     * и сохраняется carValidityRepository.save(carValidity);
+     * Далее, если в addNewCarDtoPayload (входные) указан id
+     * водителя > 1, то находится данный водитель
+     * driversRepository.findById(addNewCarDtoPayload.getDriverId())
+     * и ему присваивается данная машина.
+     *  driver.getCars().add(car);
+     * driversRepository.save(driver)
+     *
      *
      * Если в описании машины не указан водитель, то он не проставляется
      *
      * @param user                Пользователь, который отправил запрос на создание.
-     * @param addNewCarDtoPayload описание новой машины в формате
+     * @param addNewCarDtoPayload описание новой машины в формате <br />
      *                            {
      *                                 long driverId;
      *                                 int max_weight;
@@ -139,7 +164,13 @@ public class CarService {
     }
 
     /**
-     * Найти все действующие машины в базе
+     * <h4>Найти все действующие машины в базе</h4>
+     * <br />
+     * Находятся все машины carRepository.findAll()
+     * Затем для каждой машины
+     * из найденных проверяется валидность путем
+     * поиска по id машины в таблице валидности
+     * (carValidityRepository.findByCarId(car))
      *
      * @throws NotFoundException если arRepository.findAll() выдал не существующие id
      *
@@ -159,6 +190,9 @@ public class CarService {
 
     /**
      * Получить все типы машин
+     * <br />
+     * Достаются все типы из базы путем
+     * carTypeRepository.findAll()
      *
      * @return List[CarTypeDto] массив машин в виде представлений для пользователя
      */
