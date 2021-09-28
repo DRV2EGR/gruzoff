@@ -124,54 +124,6 @@ public class OrderServiceTest {
         assertThrows(Exception.class, () -> this.orderService.getOrderById(-5L));
     }
 
-//    @Test
-//    public void testCreateNewOrder_correct() throws Exception {
-//
-//        CreateOrderDtoPayload createOrderDtoPayload = new CreateOrderDtoPayload();
-//        createOrderDtoPayload.setCustomerId(1L);
-//        createOrderDtoPayload.setCar_type(1L);
-//        createOrderDtoPayload.setNumOfLoaders(1);
-//
-//        UserDtoPayload userDtoPayload = new UserDtoPayload("", "", "", "", "", "", "", "");
-//        List userList =  List.of(userDtoPayload);
-//
-//        createOrderDtoPayload.setExtraCustomers(userList);
-//
-//        Adress adress = new Adress(); adress.setLatitude(13); adress.setLongitude(222); adress.setCountry("c"); adress.setStreet("s");
-//        adress.setTown("t"); adress.setHouseNomber("56");
-//
-//
-//        OrderDetailsDtoPayload orderDetailsDtoPayload = new OrderDetailsDtoPayload();
-//        orderDetailsDtoPayload.setAdressFrom(adress);
-//        orderDetailsDtoPayload.setAdressTo(adress);
-//        orderDetailsDtoPayload.setLoadersCapacity(2);
-//        orderDetailsDtoPayload.setTimeOnOrder(3);
-//        orderDetailsDtoPayload.setComment("");
-//        orderDetailsDtoPayload.setDateTime(new Date());
-//
-//        createOrderDtoPayload.setOrderDetails(orderDetailsDtoPayload);
-//
-//
-//
-//        OrderDto orderDto = new OrderDto(); orderDto.setOrderDetails(new OrderDetailsDto());
-//
-//
-//        CarType carType = new CarType(); carType.setPricePerHour(120); carType.setDescription(""); carType.setId(1L);
-//        User user = new User("f", "s", "l", "e", "p");
-//        Customers customer = new Customers();
-//
-//        when(this.carTypeRepository.findById((Long) any())).thenReturn(Optional.of(carType));
-//        when(this.userService.findById((Long) any())).thenReturn(Optional.of(user));
-//        when(this.customerRepository.findByUser((User) any())).thenReturn(Optional.of(customer));
-//        when(this.roleRepository.findById((Long) any())).thenReturn(Optional.of(new Role()));
-//
-//        System.out.println(orderDto);
-//        System.out.println("\n\n");
-//        System.out.println(this.orderService.createNewOrder(createOrderDtoPayload).toString());
-//
-//        assertEquals(orderDto, this.orderService.createNewOrder(createOrderDtoPayload));
-//    }
-
     @Test
     public void testCreateNewOrder_exception(){
         CreateOrderDtoPayload createOrderDtoPayload = new CreateOrderDtoPayload();
